@@ -2,3 +2,5 @@ D:\GUC Curiculum\7th Semster\Graphics\lab\project helpers\OpenGLMeshLoader19 - s
 D:\GUC Curiculum\7th Semster\Graphics\lab\project helpers\OpenGLMeshLoader19 - sky\OpenGLMeshLoader19 - sky\Debug\OpenGLMeshLoader19.pdb
 C:\Users\Dalia\source\repos\New folder\Debug\OpenGLMeshLoader19.exe
 C:\Users\Dalia\source\repos\New folder\Debug\OpenGLMeshLoader19.pdb
+C:\Users\Dalia\source\repos\New folder (2)\Debug\OpenGLMeshLoader19.exe
+C:\Users\Dalia\source\repos\New folder (2)\Debug\OpenGLMeshLoader19.pdb

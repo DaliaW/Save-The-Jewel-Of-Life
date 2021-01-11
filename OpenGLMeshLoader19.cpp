@@ -40,9 +40,9 @@ Vector Up(0, 1, 0);
 int cameraZoom = 0;
 
 // Model Variables
-//Model_3DS model_house;
+Model_3DS model_house;
 Model_3DS model_tree;
-//Model_3DS model_tree2;
+Model_3DS model_fence;
 Model_3DS model_flower;
 
 // Textures
@@ -152,7 +152,7 @@ void RenderGround()
 	glPushMatrix();
 	glBegin(GL_QUADS);
 	glNormal3f(0, 1, 0);	// Set quad normal direction.
-	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glTexCoord2f(2, 2);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
 	glVertex3f(-20, 0, -20);
 	glTexCoord2f(5, 0);
 	glVertex3f(20, 0, -20);
@@ -192,29 +192,85 @@ void myDisplay(void)
 	model_tree.Draw();
 	glPopMatrix();
 
-	// Draw Tree Model
-	//glPushMatrix();
-	//glTranslatef(10, 0, 0);
-	//glScalef(0.7, 0.7, 0.7);
-	//model_tree2.Draw();
-	//glPopMatrix();
+	// Draw Fence Model
+	for (int i = 9.5; i > 5; i-=0.8) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
 
-	// Draw flower Model
+
+	// Draw Fence Model
 	glPushMatrix();
-	glTranslatef(-10, 0, 15);
-	glRotatef(150.f, 0, 1, 0);
-	glScalef(0.007, 0.007, 0.007);
-	model_flower.Draw();
+	glTranslatef(10, 0, 6.5);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
 	glPopMatrix();
 
-	// Draw flower Model
+	// Draw Fence Model
 	glPushMatrix();
-	glTranslatef(0, 0, 5);
-	glRotatef(40.f, 0, 1, 0);
-	glScalef(0.007, 0.007, 0.007);
-	model_flower.Draw();
+	glTranslatef(10, 0, 5);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
 	glPopMatrix();
 
+	// Draw Fence Model
+	glPushMatrix();
+	glTranslatef(10, 0, 3.5);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
+	glPopMatrix();
+
+	// Draw Fence Model
+	glPushMatrix();
+	glTranslatef(10, 0, 2);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
+	glPopMatrix();
+
+	// Draw Fence Model
+	glPushMatrix();
+	glTranslatef(10, 0, 1);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
+	glPopMatrix();
+
+    // Draw house Model
+	glPushMatrix();
+	glRotatef(90.f, 1, 0, 0);
+	model_house.Draw();
+	glPopMatrix();
+
+	for (int i = 0; i <= 15; i+=3) {
+		for (int j = 10; j <= 15; j += 3) {
+			// Draw flower Model
+			glPushMatrix();
+			glTranslatef(i, 0, j);
+			glRotatef(40.f, 0, 1, 0);
+			glScalef(0.003, 0.003, 0.003);
+			model_flower.Draw();
+			glPopMatrix();
+		}
+	}
+
+	for (int i = 10; i <= 15; i += 2) {
+		for (int j = -3; j <= 0; j += 2) {
+			// Draw flower Model
+			glPushMatrix();
+			glTranslatef(i, 0, j);
+			glRotatef(40.f, 0, 1, 0);
+			glScalef(0.003, 0.003, 0.003);
+			model_flower.Draw();
+			glPopMatrix();
+		}
+	}
 
 	//sky box
 	glPushMatrix();
@@ -336,8 +392,10 @@ void LoadAssets()
 {
 	// Loading Model files
 	model_tree.Load("Models/tree/Tree1.3ds");
-	//model_tree2.Load("Models/tree2/plants.3ds");
+	model_fence.Load("Models/fence/fence.3ds");
 	model_flower.Load("Models/flower/plants.3ds");
+	model_house.Load("Models/house/house.3DS");
+
 
 	// Loading texture files
 	tex_ground.Load("Textures/ground.bmp");
