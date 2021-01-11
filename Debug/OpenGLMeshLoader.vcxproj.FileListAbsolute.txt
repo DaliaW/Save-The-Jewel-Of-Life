@@ -1,0 +1,2 @@
+D:\GUC Curiculum\7th Semster\Graphics\lab\project helpers\OpenGLMeshLoader19 - sky\OpenGLMeshLoader19 - sky\Debug\OpenGLMeshLoader19.exe
+D:\GUC Curiculum\7th Semster\Graphics\lab\project helpers\OpenGLMeshLoader19 - sky\OpenGLMeshLoader19 - sky\Debug\OpenGLMeshLoader19.pdb
