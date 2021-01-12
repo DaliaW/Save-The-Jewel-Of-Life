@@ -354,7 +354,7 @@ void myDisplay(void)
 	glPopMatrix();
 
 	// Draw Fence Model
-	for (int i = 9.5; i > 5; i-=0.8) {
+	for (int i = 9.5; i > 5; i -= 0.8) {
 		glPushMatrix();
 		glTranslatef(i, 0, 7);
 		glScalef(0.9, 0.9, 0.9);
@@ -362,7 +362,23 @@ void myDisplay(void)
 		glPopMatrix();
 	}
 
-	// Draw Fence Model
+	// Draw the back of the Fence Model
+	glPushMatrix();
+	glTranslatef(0, 0, -10);
+	glPushMatrix();
+	for (int i = -10; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+	glPopMatrix();
+	glPopMatrix();
+
+
+
+	// Draw the front of the Fence Model
 	for (int i = -10; i <= 0; i += 1) {
 		glPushMatrix();
 		glTranslatef(i, 0, 7);
@@ -371,7 +387,7 @@ void myDisplay(void)
 		glPopMatrix();
 	}
 
-	// Draw Fence Model
+	// Draw the left side of the Fence Model
 	for (int i = 0; i <= 6.9; i += 1.1) {
 		glPushMatrix();
 		glTranslatef(-10, 0, i);
@@ -427,9 +443,9 @@ void myDisplay(void)
 	model_house.Draw();
 	glPopMatrix();
 
+	// Draw the flowers that are in front of the house Model
 	for (int i = 0; i <= 15; i+=3) {
 		for (int j = 10; j <= 15; j += 3) {
-			// Draw flower Model
 			glPushMatrix();
 			glTranslatef(i, 0, j);
 			glRotatef(40.f, 0, 1, 0);
@@ -439,9 +455,9 @@ void myDisplay(void)
 		}
 	}
 
+	// Draw the back flowers bushes Model
 	for (int i = 10; i <= 15; i += 2) {
 		for (int j = -3; j <= 0; j += 2) {
-			// Draw flower Model
 			glPushMatrix();
 			glTranslatef(i, 0, j);
 			glRotatef(40.f, 0, 1, 0);
