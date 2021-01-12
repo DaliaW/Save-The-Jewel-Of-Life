@@ -1,7 +1,13 @@
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
 #include <glut.h>
+
+#define GLUT_KEY_ESCAPE 27
+#define DEG2RAD(a) (a * 0.0174532925)
 
 int WIDTH = 1280;
 int HEIGHT = 720;
@@ -19,7 +25,6 @@ class Vector
 {
 public:
 	GLdouble x, y, z;
-	Vector() {}
 	Vector(GLdouble _x, GLdouble _y, GLdouble _z) : x(_x), y(_y), z(_z) {}
 	//================================================================================================//
 	// Operator Overloading; In C++ you can override the behavior of operators for you class objects. //
@@ -32,6 +37,95 @@ public:
 		z += value;
 	}
 };
+
+class Vector3f {
+public:
+	float x, y, z;
+
+	Vector3f(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f) {
+		x = _x;
+		y = _y;
+		z = _z;
+	}
+
+	Vector3f operator+(Vector3f& v) {
+		return Vector3f(x + v.x, y + v.y, z + v.z);
+	}
+
+	Vector3f operator-(Vector3f& v) {
+		return Vector3f(x - v.x, y - v.y, z - v.z);
+	}
+
+	Vector3f operator*(float n) {
+		return Vector3f(x * n, y * n, z * n);
+	}
+
+	Vector3f operator/(float n) {
+		return Vector3f(x / n, y / n, z / n);
+	}
+
+	Vector3f unit() {
+		return *this / sqrt(x * x + y * y + z * z);
+	}
+
+	Vector3f cross(Vector3f v) {
+		return Vector3f(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
+	}
+};
+
+class Camera {
+public:
+	Vector3f eye, center, up;
+
+	Camera(float eyeX = 1.0f, float eyeY = 1.0f, float eyeZ = 1.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
+		eye = Vector3f(eyeX, eyeY, eyeZ);
+		center = Vector3f(centerX, centerY, centerZ);
+		up = Vector3f(upX, upY, upZ);
+	}
+
+	void moveX(float d) {
+		Vector3f right = up.cross(center - eye).unit();
+		eye = eye + right * d;
+		center = center + right * d;
+	}
+
+	void moveY(float d) {
+		eye = eye + up.unit() * d;
+		center = center + up.unit() * d;
+	}
+
+	void moveZ(float d) {
+		Vector3f view = (center - eye).unit();
+		eye = eye + view * d;
+		center = center + view * d;
+	}
+
+	void rotateX(float a) {
+		Vector3f view = (center - eye).unit();
+		Vector3f right = up.cross(view).unit();
+		view = view * cos(DEG2RAD(a)) + up * sin(DEG2RAD(a));
+		up = view.cross(right);
+		center = eye + view;
+	}
+
+	void rotateY(float a) {
+		Vector3f view = (center - eye).unit();
+		Vector3f right = up.cross(view).unit();
+		view = view * cos(DEG2RAD(a)) + right * sin(DEG2RAD(a));
+		right = view.cross(up);
+		center = eye + view;
+	}
+
+	void look() {
+		gluLookAt(
+			eye.x, eye.y, eye.z,
+			center.x, center.y, center.z,
+			up.x, up.y, up.z
+		);
+	}
+};
+
+Camera camera;
 
 Vector Eye(20, 5, 20);
 Vector At(0, 0, 0);
@@ -48,6 +142,66 @@ Model_3DS model_flower;
 // Textures
 GLTexture tex_ground;
 
+
+void setupCamera() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60, 640 / 480, 0.001, 100);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	camera.look();
+}
+
+void Keyboard(unsigned char key, int x, int y) {
+	float d = 0.01;
+
+	switch (key) {
+	case 'w':
+		camera.moveY(d);
+		break;
+	case 's':
+		camera.moveY(-d);
+		break;
+	case 'a':
+		camera.moveX(d);
+		break;
+	case 'd':
+		camera.moveX(-d);
+		break;
+	case 'q':
+		camera.moveZ(d);
+		break;
+	case 'e':
+		camera.moveZ(-d);
+		break;
+
+	case GLUT_KEY_ESCAPE:
+		exit(EXIT_SUCCESS);
+	}
+	glutPostRedisplay();
+}
+
+void Special(int key, int x, int y) {
+	float a = 1.0;
+
+	switch (key) {
+	case GLUT_KEY_UP:
+		camera.rotateX(a);
+		break;
+	case GLUT_KEY_DOWN:
+		camera.rotateX(-a);
+		break;
+	case GLUT_KEY_LEFT:
+		camera.rotateY(a);
+		break;
+	case GLUT_KEY_RIGHT:
+		camera.rotateY(-a);
+		break;
+	}
+
+	glutPostRedisplay();
+}
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
@@ -192,6 +346,13 @@ void myDisplay(void)
 	model_tree.Draw();
 	glPopMatrix();
 
+	// Draw Tree Model
+	glPushMatrix();
+	glTranslatef(-10, 0, -2);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
 	// Draw Fence Model
 	for (int i = 9.5; i > 5; i-=0.8) {
 		glPushMatrix();
@@ -201,6 +362,24 @@ void myDisplay(void)
 		glPopMatrix();
 	}
 
+	// Draw Fence Model
+	for (int i = -10; i <= 0; i += 1) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw Fence Model
+	for (int i = 0; i <= 6.9; i += 1.1) {
+		glPushMatrix();
+		glTranslatef(-10, 0, i);
+		glRotatef(90.f, 0, 1, 0);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
 
 	// Draw Fence Model
 	glPushMatrix();
@@ -288,33 +467,31 @@ void myDisplay(void)
 
 	glPopMatrix();
 
-
-
 	glutSwapBuffers();
 }
 
 //=======================================================================
 // Keyboard Function
 //=======================================================================
-void myKeyboard(unsigned char button, int x, int y)
-{
-	switch (button)
-	{
-	case 'w':
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		break;
-	case 'r':
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		break;
-	case 27:
-		exit(0);
-		break;
-	default:
-		break;
-	}
-
-	glutPostRedisplay();
-}
+//void myKeyboard(unsigned char button, int x, int y)
+//{
+//	switch (button)
+//	{
+//	case 'w':
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//		break;
+//	case 'r':
+//		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+//		break;
+//	case 27:
+//		exit(0);
+//		break;
+//	default:
+//		break;
+//	}
+//
+//	glutPostRedisplay();
+//}
 
 //=======================================================================
 // Motion Function
@@ -419,7 +596,10 @@ void main(int argc, char** argv)
 
 	glutDisplayFunc(myDisplay);
 
-	glutKeyboardFunc(myKeyboard);
+	glutKeyboardFunc(Keyboard);
+
+	glutSpecialFunc(Special);
+
 
 	glutMotionFunc(myMotion);
 
