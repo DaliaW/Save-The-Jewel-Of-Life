@@ -348,7 +348,19 @@ void myDisplay(void)
 
 	// Draw Tree Model
 	glPushMatrix();
+	glTranslatef(-10, 0, -1);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
 	glTranslatef(-10, 0, -2);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(5, 0, -5);
 	glScalef(0.7, 0.7, 0.7);
 	model_tree.Draw();
 	glPopMatrix();
@@ -398,36 +410,14 @@ void myDisplay(void)
 	}
 
 	// Draw Fence Model
-	glPushMatrix();
-	glTranslatef(10, 0, 6.5);
-	glRotatef(90.f, 0, 1, 0);
-	glScalef(0.9, 0.9, 0.9);
-	model_fence.Draw();
-	glPopMatrix();
-
-	// Draw Fence Model
-	glPushMatrix();
-	glTranslatef(10, 0, 5);
-	glRotatef(90.f, 0, 1, 0);
-	glScalef(0.9, 0.9, 0.9);
-	model_fence.Draw();
-	glPopMatrix();
-
-	// Draw Fence Model
-	glPushMatrix();
-	glTranslatef(10, 0, 3.5);
-	glRotatef(90.f, 0, 1, 0);
-	glScalef(0.9, 0.9, 0.9);
-	model_fence.Draw();
-	glPopMatrix();
-
-	// Draw Fence Model
-	glPushMatrix();
-	glTranslatef(10, 0, 2);
-	glRotatef(90.f, 0, 1, 0);
-	glScalef(0.9, 0.9, 0.9);
-	model_fence.Draw();
-	glPopMatrix();
+	for (int i = 7; i > 1; i-=0.5) {
+        glPushMatrix();
+        glTranslatef(10, 0, i);
+        glRotatef(90.f, 0, 1, 0); 
+        glScalef(0.9, 0.9, 0.9);
+        model_fence.Draw();
+        glPopMatrix();
+	}
 
 	// Draw Fence Model
 	glPushMatrix();
