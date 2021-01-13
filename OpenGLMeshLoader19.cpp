@@ -13,6 +13,11 @@ int WIDTH = 1280;
 int HEIGHT = 720;
 
 GLuint tex;
+
+GLuint texC;
+GLuint texG;
+GLuint texS;
+
 char title[] = "3D Model Loader Sample";
 
 // 3D Projection Options
@@ -339,7 +344,14 @@ void myDisplay(void)
 	setupCamera();
 	// Draw Ground
 	RenderGround();
-	glDisable(GL_LIGHTING);
+	//glDisable(GL_LIGHTING);
+
+
+	//glPushMatrix();
+	//glBindTexture(GL_TEXTURE_2D, texS);
+	//glutSolidSphere(0.5, 16, 16);
+	//glPopMatrix();
+
 	// Draw Tree Model
 	glPushMatrix();
 	glTranslatef(10, 0, 0);
@@ -465,6 +477,43 @@ void myDisplay(void)
 			glPopMatrix();
 		}
 	}
+
+	// coins
+	glPushMatrix();
+	// Bronze coin
+	GLUquadricObj* qobjx;
+	qobjx = gluNewQuadric();
+	glTranslatef(10, 1, 18);
+	glBindTexture(GL_TEXTURE_2D, texC);
+	gluQuadricTexture(qobjx, true);
+	gluQuadricNormals(qobjx, GL_SMOOTH);
+	gluDisk(qobjx, 0, 0.2, 20, 20);
+	gluDeleteQuadric(qobjx);
+	glPopMatrix();
+
+	glPushMatrix();
+	// Silver coin
+	GLUquadricObj* qobjy;
+	qobjy = gluNewQuadric();
+	glTranslatef(5, 1, 16);
+	glBindTexture(GL_TEXTURE_2D, texS);
+	gluQuadricTexture(qobjy, true);
+	gluQuadricNormals(qobjy, GL_SMOOTH);
+	gluDisk(qobjy, 0, 0.2, 20, 20);
+	gluDeleteQuadric(qobjy);
+	glPopMatrix();
+
+	glPushMatrix();
+	// Gold coin
+	GLUquadricObj* qobjz;
+	qobjz = gluNewQuadric();
+	glTranslatef(15, 1, 16);
+	glBindTexture(GL_TEXTURE_2D, texG);
+	gluQuadricTexture(qobjz, true);
+	gluQuadricNormals(qobjz, GL_SMOOTH);
+	gluDisk(qobjz, 0, 0.2, 20, 20);
+	gluDeleteQuadric(qobjz);
+	glPopMatrix();
 
 	//sky box
 	glPushMatrix();
@@ -592,8 +641,14 @@ void LoadAssets()
 
 
 	// Loading texture files
-	tex_ground.Load("Textures/ground.bmp");
-	loadBMP(&tex, "Textures/panoramic-view.bmp", false);
+	tex_ground.Load("Textures/ground.bmp"); // ground
+	loadBMP(&tex, "Textures/panoramic-view.bmp", false); // sky
+
+	// coins textures
+	loadBMP(&texC, "Textures/bronze.bmp", false); // sky
+	loadBMP(&texG, "Textures/gold.bmp", false); // sky
+	loadBMP(&texS, "Textures/silver.bmp", false); // sky
+
 }
 
 //=======================================================================
