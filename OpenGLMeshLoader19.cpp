@@ -161,7 +161,7 @@ void setupCamera() {
 }
 
 void Keyboard(unsigned char key, int x, int y) {
-	float d = 0.01;
+	float d = 0.1;
 
 	switch (key) {
 	case 'w':
@@ -177,10 +177,10 @@ void Keyboard(unsigned char key, int x, int y) {
 		camera.moveX(-d);
 		break;
 	case 'q':
-		camera.moveZ(d+0.1);
+		camera.moveZ(d);
 		break;
 	case 'e':
-		camera.moveZ(-d-0.1);
+		camera.moveZ(-d);
 		break;
 
 	case GLUT_KEY_ESCAPE:
@@ -371,6 +371,134 @@ void bronzeCoin(float x, float y, float z) {
 	glPopMatrix();
 }
 
+void drawCharacter(float x, float z) {
+	float acat = 1;
+	//head
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPushMatrix();
+	glTranslated(15 + x, 9 + acat, 20 + 1.4 + z);
+	glRotated(290, 1, 0, 0);
+	glutSolidCone(0.5, 1.3, 10, 10);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(15 + x, 9 + acat, 20 - 0.8 + z);
+	glRotated(250, 1, 0, 0);
+	glutSolidCone(0.5, 1.3, 10, 10);
+	glPopMatrix();
+
+
+	//eyes
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(13.6 + x, 8 + acat, 19 + z);
+	glutSolidSphere(0.4, 15, 15);
+	glPopMatrix();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(13.6 + x, 8 + acat, 21 + z);
+	glutSolidSphere(0.4, 15, 15);
+	glPopMatrix();
+	//nose
+	glColor3f(1.0f, 0.6f, 0.5f);
+	glPushMatrix();
+	glTranslated(13 + x, 6.5 + acat, 20 + z);
+	glutSolidSphere(0.3, 15, 15);
+	glPopMatrix();
+
+	//whiskers
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(13 + x, 0.2 + 6.5 + acat, 21 + z);
+	glScaled(0.1, 0.1, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(13 + x, 0.2 + 6 + acat, 21 + z);
+	glScaled(0.1, 0.1, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(13 + x, 0.2 + 6.5 + acat, 19 + z);
+	glScaled(0.1, 0.1, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(13 + x, 0.2 + 6 + acat, 19 + z);
+	glScaled(0.1, 0.1, 2);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	//cont head
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPushMatrix();
+	glTranslated(15 + x, 7 + acat, 20 + z);
+	glutSolidSphere(2, 20, 20);
+	glPopMatrix();
+
+
+	//torso
+	glPushMatrix();
+	glTranslated(17 + x, 5 + acat, 20 + z);
+	glutSolidSphere(2, 20, 20);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(20 + x, 5 + acat, 20 + z);
+	glutSolidSphere(2, 20, 20);
+	glPopMatrix();
+
+
+
+	//legs
+	glPushMatrix();
+	glTranslated(21 + x, 2.5 + acat, 20.5 - 2 + z);
+	glScaled(0.5, 4, 0.5);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(21 + x, 2.5 + acat, 23.5 - 2 + z);
+	glScaled(0.5, 4, 0.5);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(21 - 5 + x, 2.5 + acat, 20.5 - 2 + z);
+	glScaled(0.5, 4, 0.5);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(21 - 5 + x, 2.5 + acat, 23.5 - 2 + z);
+	glScaled(0.5, 4, 0.5);
+	glutSolidCube(1);
+	glPopMatrix();
+
+	//tail
+	glPushMatrix();
+	glTranslated(22 + x, 5 + acat, 20 + z);
+	glRotated(45, 1, 0, 0);
+	//glScaled(0.5, 3, 0.5);
+	glutSolidCone(0.5, 5, 10, 10);
+	glPopMatrix();
+
+	//std::cout << catx << "catx \n";
+	//std::cout << ballx << "ballx \n";
+	//std::cout << catz << "catz \n";
+	//std::cout << ballz << "ballz \n";
+	//std::cout << win << "\n";
+
+}
+
 //=======================================================================
 // Display Function
 //=======================================================================
@@ -384,15 +512,11 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 
 	setupCamera();
+
 	// Draw Ground
 	RenderGround();
+
 	//glDisable(GL_LIGHTING);
-
-
-	//glPushMatrix();
-	//glBindTexture(GL_TEXTURE_2D, texS);
-	//glutSolidSphere(0.5, 16, 16);
-	//glPopMatrix();
 
 	// Draw Tree Model
 	glPushMatrix();
@@ -420,11 +544,11 @@ void myDisplay(void)
 	model_tree.Draw();
 	glPopMatrix();
 
-	// Draw the character model
+	// Draw the character
 	glPushMatrix();
-	glTranslatef(10, 0, 20);
+	glTranslatef(5, 1.8, 17);
 	glRotatef(180.f, 0, 1, 0);
-	glScalef(0.03, 0.03, 0.03);
+	glScalef(1.3, 1.3, 1.3);
 	model_man.Draw();
 	glPopMatrix();
 
@@ -450,8 +574,6 @@ void myDisplay(void)
 	}
 	glPopMatrix();
 	glPopMatrix();
-
-
 
 	// Draw the front of the Fence Model
 	for (int i = -10; i <= 0; i += 1) {
@@ -520,6 +642,8 @@ void myDisplay(void)
 		}
 	}
 
+	drawCharacter(10, 10);
+
 	// coins
 	bronzeCoin(10, 1, 18);
 
@@ -543,34 +667,10 @@ void myDisplay(void)
 	gluSphere(qobj, 100, 200, 200);
 	gluDeleteQuadric(qobj);
 
-
 	glPopMatrix();
 
 	glutSwapBuffers();
 }
-
-//=======================================================================
-// Keyboard Function
-//=======================================================================
-//void myKeyboard(unsigned char button, int x, int y)
-//{
-//	switch (button)
-//	{
-//	case 'w':
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-//		break;
-//	case 'r':
-//		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-//		break;
-//	case 27:
-//		exit(0);
-//		break;
-//	default:
-//		break;
-//	}
-//
-//	glutPostRedisplay();
-//}
 
 //=======================================================================
 // Motion Function
@@ -651,7 +751,7 @@ void LoadAssets()
 	model_fence.Load("Models/fence/fence.3ds");
 	model_flower.Load("Models/flower/plants.3ds");
 	model_house.Load("Models/house/house.3DS");
-	model_man.Load("Models/character/StickFigurea.3ds");
+	model_man.Load("Models/character/worker.3ds");
 
 
 	// Loading texture files
@@ -659,9 +759,9 @@ void LoadAssets()
 	loadBMP(&tex, "Textures/panoramic-view.bmp", false); // sky
 
 	// coins textures
-	loadBMP(&texC, "Textures/bronze.bmp", false); // sky
-	loadBMP(&texG, "Textures/gold.bmp", false); // sky
-	loadBMP(&texS, "Textures/silver.bmp", false); // sky
+	loadBMP(&texC, "Textures/bronze.bmp", false); // texture for bronze coin
+	loadBMP(&texG, "Textures/gold.bmp", false); // texture for gold coin
+	loadBMP(&texS, "Textures/silver.bmp", false); // texture for silver coin
 
 }
 
@@ -685,7 +785,6 @@ void main(int argc, char** argv)
 	glutKeyboardFunc(Keyboard);
 
 	glutSpecialFunc(Special);
-
 
 	glutMotionFunc(myMotion);
 
