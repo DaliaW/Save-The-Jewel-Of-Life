@@ -77,7 +77,7 @@ class Camera {
 public:
 	Vector3f eye, center, up;
 
-	Camera(float eyeX = 1.0f, float eyeY = 1.0f, float eyeZ = 1.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
+	Camera(float eyeX = 10.0f, float eyeY = 3.0f, float eyeZ = 20.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
 		eye = Vector3f(eyeX, eyeY, eyeZ);
 		center = Vector3f(centerX, centerY, centerZ);
 		up = Vector3f(upX, upY, upZ);
@@ -138,6 +138,8 @@ Model_3DS model_house;
 Model_3DS model_tree;
 Model_3DS model_fence;
 Model_3DS model_flower;
+Model_3DS model_man;
+
 
 // Textures
 GLTexture tex_ground;
@@ -146,7 +148,7 @@ GLTexture tex_ground;
 void setupCamera() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, 640 / 480, 0.001, 100);
+	gluPerspective(60, 640 / 480, 0.001, 1000000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -170,10 +172,10 @@ void Keyboard(unsigned char key, int x, int y) {
 		camera.moveX(-d);
 		break;
 	case 'q':
-		camera.moveZ(d);
+		camera.moveZ(d+0.1);
 		break;
 	case 'e':
-		camera.moveZ(-d);
+		camera.moveZ(-d-0.1);
 		break;
 
 	case GLUT_KEY_ESCAPE:
@@ -329,13 +331,12 @@ void myDisplay(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
 	GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
 	GLfloat lightPosition[] = { 0.0f, 100.0f, 0.0f, 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 
+	setupCamera();
 	// Draw Ground
 	RenderGround();
 	glDisable(GL_LIGHTING);
@@ -363,6 +364,14 @@ void myDisplay(void)
 	glTranslatef(5, 0, -5);
 	glScalef(0.7, 0.7, 0.7);
 	model_tree.Draw();
+	glPopMatrix();
+
+	// Draw the character model
+	glPushMatrix();
+	glTranslatef(10, 0, 20);
+	glRotatef(180.f, 0, 1, 0);
+	glScalef(0.03, 0.03, 0.03);
+	model_man.Draw();
 	glPopMatrix();
 
 	// Draw Fence Model
@@ -462,12 +471,13 @@ void myDisplay(void)
 
 	GLUquadricObj* qobj;
 	qobj = gluNewQuadric();
-	glTranslated(50, 0, 0);
-	glRotated(90, 1, 0, 1);
+	glTranslated(70, 0, 0);
+	glRotated(240, 1, 0, 1);
+	glColor3f(0.831, 0.925, 0.988);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	gluQuadricTexture(qobj, true);
 	gluQuadricNormals(qobj, GL_SMOOTH);
-	gluSphere(qobj, 100, 100, 100);
+	gluSphere(qobj, 100, 200, 200);
 	gluDeleteQuadric(qobj);
 
 
@@ -578,11 +588,12 @@ void LoadAssets()
 	model_fence.Load("Models/fence/fence.3ds");
 	model_flower.Load("Models/flower/plants.3ds");
 	model_house.Load("Models/house/house.3DS");
+	model_man.Load("Models/character/StickFigurea.3ds");
 
 
 	// Loading texture files
 	tex_ground.Load("Textures/ground.bmp");
-	loadBMP(&tex, "Textures/blu-sky-3.bmp", false);
+	loadBMP(&tex, "Textures/panoramic-view.bmp", false);
 }
 
 //=======================================================================
