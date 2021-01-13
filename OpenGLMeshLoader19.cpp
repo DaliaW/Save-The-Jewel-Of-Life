@@ -329,6 +329,48 @@ void RenderGround()
 	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
+void goldCoin(float x,float y,float z) {
+	glPushMatrix();
+	// Gold coin
+	GLUquadricObj* qobjz;
+	qobjz = gluNewQuadric();
+	glTranslatef(x, y, z);
+	glBindTexture(GL_TEXTURE_2D, texG);
+	gluQuadricTexture(qobjz, true);
+	gluQuadricNormals(qobjz, GL_SMOOTH);
+	gluDisk(qobjz, 0, 0.2, 20, 20);
+	gluDeleteQuadric(qobjz);
+	glPopMatrix();
+}
+
+void silverCoin(float x, float y, float z) {
+	glPushMatrix();
+	// Silver coin
+	GLUquadricObj* qobjy;
+	qobjy = gluNewQuadric();
+	glTranslatef(x, y, z);
+	glBindTexture(GL_TEXTURE_2D, texS);
+	gluQuadricTexture(qobjy, true);
+	gluQuadricNormals(qobjy, GL_SMOOTH);
+	gluDisk(qobjy, 0, 0.2, 20, 20);
+	gluDeleteQuadric(qobjy);
+	glPopMatrix();
+}
+
+void bronzeCoin(float x, float y, float z) {
+	glPushMatrix();
+	// Bronze coin
+	GLUquadricObj* qobjx;
+	qobjx = gluNewQuadric();
+	glTranslatef(x, y, z);
+	glBindTexture(GL_TEXTURE_2D, texC);
+	gluQuadricTexture(qobjx, true);
+	gluQuadricNormals(qobjx, GL_SMOOTH);
+	gluDisk(qobjx, 0, 0.2, 20, 20);
+	gluDeleteQuadric(qobjx);
+	glPopMatrix();
+}
+
 //=======================================================================
 // Display Function
 //=======================================================================
@@ -479,41 +521,13 @@ void myDisplay(void)
 	}
 
 	// coins
-	glPushMatrix();
-	// Bronze coin
-	GLUquadricObj* qobjx;
-	qobjx = gluNewQuadric();
-	glTranslatef(10, 1, 18);
-	glBindTexture(GL_TEXTURE_2D, texC);
-	gluQuadricTexture(qobjx, true);
-	gluQuadricNormals(qobjx, GL_SMOOTH);
-	gluDisk(qobjx, 0, 0.2, 20, 20);
-	gluDeleteQuadric(qobjx);
-	glPopMatrix();
+	bronzeCoin(10, 1, 18);
 
-	glPushMatrix();
 	// Silver coin
-	GLUquadricObj* qobjy;
-	qobjy = gluNewQuadric();
-	glTranslatef(5, 1, 16);
-	glBindTexture(GL_TEXTURE_2D, texS);
-	gluQuadricTexture(qobjy, true);
-	gluQuadricNormals(qobjy, GL_SMOOTH);
-	gluDisk(qobjy, 0, 0.2, 20, 20);
-	gluDeleteQuadric(qobjy);
-	glPopMatrix();
+	silverCoin(5, 1, 16);
 
-	glPushMatrix();
 	// Gold coin
-	GLUquadricObj* qobjz;
-	qobjz = gluNewQuadric();
-	glTranslatef(15, 1, 16);
-	glBindTexture(GL_TEXTURE_2D, texG);
-	gluQuadricTexture(qobjz, true);
-	gluQuadricNormals(qobjz, GL_SMOOTH);
-	gluDisk(qobjz, 0, 0.2, 20, 20);
-	gluDeleteQuadric(qobjz);
-	glPopMatrix();
+	goldCoin(15, 1, 16);
 
 	//sky box
 	glPushMatrix();
