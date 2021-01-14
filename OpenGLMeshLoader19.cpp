@@ -85,7 +85,7 @@ class Camera {
 public:
 	Vector3f eye, center, up;
 
-	Camera(float eyeX = 10.0f, float eyeY = 3.0f, float eyeZ = 20.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
+	Camera(float eyeX = 17.5f, float eyeY = 3.0f, float eyeZ = 18.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
 		eye = Vector3f(eyeX, eyeY, eyeZ);
 		center = Vector3f(centerX, centerY, centerZ);
 		up = Vector3f(upX, upY, upZ);
@@ -135,7 +135,7 @@ public:
 
 Camera camera;
 
-Vector Eye(20, 5, 20);
+Vector Eye(0, 0, 2);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
@@ -161,14 +161,19 @@ GLTexture tex_ground_grass;
 //cat movement
 
 //absolute
-float catx = -17.5;
+float catx = 17.5;
 float caty = 0;
-float catz = -14;
+float catz = 18;
 
 //relative
 float catx_add = 0;
 float caty_add = 0;
 float catz_add = 0;
+
+// garden scene variables
+bool clearGardenScene = false; // if true means that reached the house and clear lvl 1
+bool lvl_1 = true;
+int gardenSceneScore = 0;      // for the garden scene score calculations
 
 
 void sound(int reason) {
@@ -191,7 +196,7 @@ void sound(int reason) {
 void setupCamera() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, 640 / 480, 0.001, 1000000);
+	gluPerspective(72, 1, 1, 1000000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -248,10 +253,22 @@ void Special(int key, int x, int y) {
 		float temp = catz_add - 0.5;
 		if (temp + catz > -16) {
 			catz_add -= 0.5;
+			//camera.moveZ(-temp);
 			//sound(0);
 		}
 		else {
 			sound(1);
+		}
+		
+		if (lvl_1) {
+			// if reached the house then set the flag to true to clear lvl 1
+			if (0 < temp + catz < 1) {
+				if (0 < temp + catx < 1) {
+					clearGardenScene = true;
+					std::cout << (clearGardenScene) << "reached my goal:\n";
+					lvl_1 = false;
+				}
+			}
 		}
 
 	}
@@ -260,26 +277,41 @@ void Special(int key, int x, int y) {
 		float temp1 = catz_add + 0.5;
 		if (temp1 + catz < 17.5) {
 			catz_add += 0.5;
+			//camera.moveZ(temp1);
 			//sound(0);
 		}
 		else {
 			sound(1);
+		}
+
+		if (lvl_1) {
+			// if reached the house then set the flag to true to clear lvl 1
+			if (0 < temp1 + catz < 1) {
+				if (0 < temp1 + catx < 1) {
+					clearGardenScene = true;
+					std::cout << (clearGardenScene) << "reached my goal:\n";
+					lvl_1 = false;
+				}
+			}
 		}
 	}
 	else if (key == GLUT_KEY_LEFT) {
 		float temp2 = catx_add - 0.5;
 		if (temp2 + catx > -18) {
 			catx_add -= 0.5;
+			//camera.moveX(-temp2);
 			//sound(0);
 		}
 		else {
 			sound(1);
 		}
+
 	}
 	else if (key == GLUT_KEY_RIGHT) {
 		float temp3 = catx_add + 0.5;
 		if (temp3 + catx < 18) {
 			catx_add += 0.5;
+			//camera.moveX(temp3);
 			//sound(0);
 		}
 		else {
@@ -351,7 +383,7 @@ void myInit(void)
 
 	glLoadIdentity();
 
-	gluPerspective(fovy, aspectRatio, zNear, zFar);
+	//gluPerspective(fovy, aspectRatio, zNear, zFar);
 	//*******************************************************************************************//
 	// fovy:			Angle between the bottom and top of the projectors, in degrees.			 //
 	// aspectRatio:		Ratio of width to height of the clipping plane.							 //
@@ -362,7 +394,7 @@ void myInit(void)
 
 	glLoadIdentity();
 
-	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+	//gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
 	//*******************************************************************************************//
 	// EYE (ex, ey, ez): defines the location of the camera.									 //
 	// AT (ax, ay, az):	 denotes the direction where the camera is aiming at.					 //
@@ -488,15 +520,15 @@ void drawCat(float x, float y, float z) {
 	glPushMatrix();
 	glTranslatef(catx + x,caty+ y, catz+z);
 	glRotatef(180.f, 0, 1, 0);
-	glScalef(8, 8, -8);
+	glScalef(3, 3, 3);
 	model_cat.Draw();
 	glPopMatrix();
 
-	//std::cout << (catx+catx_add) << "x:\n";
+	std::cout << (catx+catx_add) << "x:\n";
 
-	//std::cout << (caty + caty_add) << "y:\n";
+	std::cout << (caty + caty_add) << "y:\n";
 
-	//std::cout << (catz + catz_add) << "z:\n";
+	std::cout << (catz + catz_add) << "z:\n";
 }
 
 void drawHellWall(float x, float y, float z) {
@@ -789,9 +821,12 @@ void myDisplay(void)
 
 	// here we should set a flag if not house_target and timer == 0 then display garden scene
 	// otherwise display hell scene
-
-	//hellScene();
-	gardenScene();
+	if (!clearGardenScene) {
+		gardenScene();
+	}
+	else {
+		hellScene();
+	}
 
 	glutSwapBuffers();
 }
@@ -857,12 +892,12 @@ void myReshape(int w, int h)
 	// set up the projection matrix 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fovy, (GLdouble)WIDTH / (GLdouble)HEIGHT, zNear, zFar);
+	//gluPerspective(fovy, (GLdouble)WIDTH / (GLdouble)HEIGHT, zNear, zFar);
 
 	// go back to modelview matrix so we can move the objects about
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+	//gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
 }
 
 //=======================================================================
