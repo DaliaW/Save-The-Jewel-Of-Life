@@ -15,9 +15,11 @@
 int WIDTH = 1280;
 int HEIGHT = 720;
 
-GLuint texC;
-GLuint texG;
-GLuint texS;
+GLuint tex; // for the garden scene skybox
+
+GLuint texC; // for the bronze coin texture
+GLuint texG; // for the gold coin texture
+GLuint texS; // for the silver coin texture
 
 char title[] = "3D Model Loader Sample";
 
@@ -141,15 +143,20 @@ int cameraZoom = 0;
 
 //Model Variables
 Model_3DS model_cat;
+Model_3DS model_house;
+Model_3DS model_tree;
+Model_3DS model_fence;
+Model_3DS model_flower;
 
 
-
-// Textures
+// Textures for the hell scene
 GLTexture tex_ground;
 GLTexture tex_sky;
 GLTexture tex_hell_wall;
 GLTexture tex_fire;
 
+// Textures for the garden scene
+GLTexture tex_ground_grass;
 
 //cat movement
 
@@ -374,7 +381,7 @@ void myInit(void)
 //=======================================================================
 // Render Ground Function
 //=======================================================================
-void RenderGround()
+void RenderHellGround()
 {
 	glDisable(GL_LIGHTING);	// Disable lighting 
 
@@ -383,6 +390,35 @@ void RenderGround()
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
 
 	glBindTexture(GL_TEXTURE_2D, tex_ground.texture[0]);	// Bind the ground texture
+
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(2, 2);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(-20, 0, -20);
+	glTexCoord2f(5, 0);
+	glVertex3f(20, 0, -20);
+	glTexCoord2f(5, 5);
+	glVertex3f(20, 0, 20);
+	glTexCoord2f(0, 5);
+	glVertex3f(-20, 0, 20);
+	glEnd();
+	glPopMatrix();
+
+	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
+	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
+}
+
+void RenderGardenGround()
+{
+	glDisable(GL_LIGHTING);	// Disable lighting 
+
+	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
+
+	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
+
+	glBindTexture(GL_TEXTURE_2D, tex_ground_grass.texture[0]);	// Bind the ground texture
 
 	glPushMatrix();
 	glBegin(GL_QUADS);
@@ -526,22 +562,9 @@ void drawFire(float x, float y, float z) {
 	//glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
-//=======================================================================
-// Display Function
-//=======================================================================
-void myDisplay(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
-	GLfloat lightPosition[] = { 0.0f, 100.0f, 0.0f, 0.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
-
-	setupCamera();
-
+void hellScene() {
 	// Draw Ground
-	RenderGround();
+	RenderHellGround();
 
 
 	//draw cat
@@ -549,13 +572,13 @@ void myDisplay(void)
 
 	//draw fire
 	drawFire(0, 0, 0);
-	
+
 
 	//back wall
 	drawHellWall(0, 3.75, -20);
 
 	for (int i = 0; i < 16;i++) {
-		drawHellWallTex(-20+(i*2.5), 0, 0.6 - 20);
+		drawHellWallTex(-20 + (i * 2.5), 0, 0.6 - 20);
 	}
 
 	//left wall
@@ -597,6 +620,178 @@ void myDisplay(void)
 	gluSphere(qobj, 100, 200, 200);
 	gluDeleteQuadric(qobj);
 	glPopMatrix();
+}
+
+void gardenScene() {
+	// Draw Ground
+	RenderGardenGround();
+
+	//draw cat
+	drawCat(catx_add, caty_add, catz_add);
+
+	//glDisable(GL_LIGHTING);
+
+	// Draw Tree Model
+	glPushMatrix();
+	glTranslatef(10, 0, 0);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	// Draw Tree Model
+	glPushMatrix();
+	glTranslatef(-10, 0, -1);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-10, 0, -2);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(5, 0, -5);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	// Draw Fence Model
+	for (int i = 9.5; i > 5; i -= 0.8) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw the back of the Fence Model
+	glPushMatrix();
+	glTranslatef(0, 0, -10);
+	glPushMatrix();
+	for (int i = -10; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+	glPopMatrix();
+	glPopMatrix();
+
+	// Draw the front of the Fence Model
+	for (int i = -10; i <= 0; i += 1) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw the left side of the Fence Model
+	for (int i = 0; i <= 6.9; i += 1.1) {
+		glPushMatrix();
+		glTranslatef(-10, 0, i);
+		glRotatef(90.f, 0, 1, 0);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw Fence Model
+	for (int i = 7; i > 1; i -= 0.5) {
+		glPushMatrix();
+		glTranslatef(10, 0, i);
+		glRotatef(90.f, 0, 1, 0);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw Fence Model
+	glPushMatrix();
+	glTranslatef(10, 0, 1);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
+	glPopMatrix();
+
+	// Draw house Model
+	glPushMatrix();
+	glRotatef(90.f, 1, 0, 0);
+	model_house.Draw();
+	glPopMatrix();
+
+	// Draw the flowers that are in front of the house Model
+	for (int i = 0; i <= 15; i += 3) {
+		for (int j = 10; j <= 15; j += 3) {
+			glPushMatrix();
+			glTranslatef(i, 0, j);
+			glRotatef(40.f, 0, 1, 0);
+			glScalef(0.003, 0.003, 0.003);
+			model_flower.Draw();
+			glPopMatrix();
+		}
+	}
+
+	// Draw the back flowers bushes Model
+	for (int i = 10; i <= 15; i += 2) {
+		for (int j = -3; j <= 0; j += 2) {
+			glPushMatrix();
+			glTranslatef(i, 0, j);
+			glRotatef(40.f, 0, 1, 0);
+			glScalef(0.003, 0.003, 0.003);
+			model_flower.Draw();
+			glPopMatrix();
+		}
+	}
+
+	// coins
+	bronzeCoin(10, 1, 18);
+
+	// Silver coin
+	silverCoin(5, 1, 16);
+
+	// Gold coin
+	goldCoin(15, 1, 16);
+
+	//sky box
+	glPushMatrix();
+
+	GLUquadricObj* qobj;
+	qobj = gluNewQuadric();
+	glTranslated(70, 0, 0);
+	glRotated(240, 1, 0, 1);
+	glColor3f(0.831, 0.925, 0.988);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	gluQuadricTexture(qobj, true);
+	gluQuadricNormals(qobj, GL_SMOOTH);
+	gluSphere(qobj, 100, 200, 200);
+	gluDeleteQuadric(qobj);
+
+	glPopMatrix();
+}
+
+//=======================================================================
+// Display Function
+//=======================================================================
+void myDisplay(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
+	GLfloat lightPosition[] = { 0.0f, 100.0f, 0.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
+
+	setupCamera();
+
+	// here we should set a flag if not house_target and timer == 0 then display garden scene
+	// otherwise display hell scene
+
+	//hellScene();
+	gardenScene();
 
 	glutSwapBuffers();
 }
@@ -678,8 +873,17 @@ void LoadAssets()
 	// Loading Model files
 	model_cat.Load("Models/cat/CatMac.3ds");
 
+	// garden scene models
+	model_tree.Load("Models/tree/Tree1.3ds");
+	model_fence.Load("Models/fence/fence.3ds");
+	model_flower.Load("Models/flower/plants.3ds");
+	model_house.Load("Models/house/house.3DS");
 
-	// Loading texture files
+	// Loading texture files for garden scene
+	tex_ground_grass.Load("Textures/ground.bmp"); // ground
+	loadBMP(&tex, "Textures/panoramic-view.bmp", false); // sky
+
+	// Loading texture files for hell scene
 	tex_ground.Load("textures/hell-ground.bmp"); // ground
 	tex_sky.Load("textures/hell-ground.bmp"); // hell scene
 	tex_hell_wall.Load("textures/hell-wall.bmp");
@@ -687,8 +891,7 @@ void LoadAssets()
 	
 	// coins textures
 	loadBMP(&texC, "textures/bronze.bmp", false); // texture for bronze coin
-	loadBMP(&texG, "textures/gold.bmp", false); // texture for gold coin
-	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
+	loadBMP(&texG, "textures/gold.bmp", false);   // texture for gold coin
 	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
 
 }
