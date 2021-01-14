@@ -4,15 +4,16 @@
 #include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
+#include <mmsystem.h>
 #include <glut.h>
+#include <iostream>
+#include <time.h>
 
 #define GLUT_KEY_ESCAPE 27
 #define DEG2RAD(a) (a * 0.0174532925)
 
 int WIDTH = 1280;
 int HEIGHT = 720;
-
-GLuint tex;
 
 GLuint texC;
 GLuint texG;
@@ -138,17 +139,47 @@ Vector Up(0, 1, 0);
 
 int cameraZoom = 0;
 
-// Model Variables
-Model_3DS model_house;
-Model_3DS model_tree;
-Model_3DS model_fence;
-Model_3DS model_flower;
-Model_3DS model_man;
+//Model Variables
+Model_3DS model_cat;
+
 
 
 // Textures
 GLTexture tex_ground;
+GLTexture tex_sky;
+GLTexture tex_hell_wall;
+GLTexture tex_fire;
 
+
+//cat movement
+
+//absolute
+float catx = -17.5;
+float caty = 0;
+float catz = -14;
+
+//relative
+float catx_add = 0;
+float caty_add = 0;
+float catz_add = 0;
+
+
+void sound(int reason) {
+	switch (reason) {
+	case 0:  //cat moves
+		PlaySound("sound_move.wav", NULL, SND_FILENAME | SND_ASYNC);
+		break;
+
+	case 1: //cat collides
+		PlaySound("sound_collide.wav", NULL, SND_FILENAME | SND_ASYNC);
+		break;
+/*	
+	case 5: //background
+		mciSendString(L"open \"sound_bg.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
+		mciSendString(L"play mp3 repeat", NULL, 0, NULL);
+		break;*/
+	}
+}
 
 void setupCamera() {
 	glMatrixMode(GL_PROJECTION);
@@ -162,6 +193,7 @@ void setupCamera() {
 
 void Keyboard(unsigned char key, int x, int y) {
 	float d = 0.1;
+	float a = 1.0;
 
 	switch (key) {
 	case 'w':
@@ -182,6 +214,18 @@ void Keyboard(unsigned char key, int x, int y) {
 	case 'e':
 		camera.moveZ(-d);
 		break;
+	case 'u':
+		camera.rotateX(a);
+		break;
+	case 'j':
+		camera.rotateX(-a);
+		break;
+	case 'h':
+		camera.rotateY(a);
+		break;
+	case 'k':
+		camera.rotateY(-a);
+		break;
 
 	case GLUT_KEY_ESCAPE:
 		exit(EXIT_SUCCESS);
@@ -190,21 +234,51 @@ void Keyboard(unsigned char key, int x, int y) {
 }
 
 void Special(int key, int x, int y) {
-	float a = 1.0;
+	
 
-	switch (key) {
-	case GLUT_KEY_UP:
-		camera.rotateX(a);
-		break;
-	case GLUT_KEY_DOWN:
-		camera.rotateX(-a);
-		break;
-	case GLUT_KEY_LEFT:
-		camera.rotateY(a);
-		break;
-	case GLUT_KEY_RIGHT:
-		camera.rotateY(-a);
-		break;
+	if (key == GLUT_KEY_UP) {
+
+		float temp = catz_add - 0.5;
+		if (temp + catz > -16) {
+			catz_add -= 0.5;
+			//sound(0);
+		}
+		else {
+			sound(1);
+		}
+
+	}
+
+	else if(key == GLUT_KEY_DOWN){
+		float temp1 = catz_add + 0.5;
+		if (temp1 + catz < 17.5) {
+			catz_add += 0.5;
+			//sound(0);
+		}
+		else {
+			sound(1);
+		}
+	}
+	else if (key == GLUT_KEY_LEFT) {
+		float temp2 = catx_add - 0.5;
+		if (temp2 + catx > -18) {
+			catx_add -= 0.5;
+			//sound(0);
+		}
+		else {
+			sound(1);
+		}
+	}
+	else if (key == GLUT_KEY_RIGHT) {
+		float temp3 = catx_add + 0.5;
+		if (temp3 + catx < 18) {
+			catx_add += 0.5;
+			//sound(0);
+		}
+		else {
+			sound(1);
+		}
+	
 	}
 
 	glutPostRedisplay();
@@ -335,6 +409,7 @@ void goldCoin(float x,float y,float z) {
 	GLUquadricObj* qobjz;
 	qobjz = gluNewQuadric();
 	glTranslatef(x, y, z);
+	glScaled(2, 2, 2);
 	glBindTexture(GL_TEXTURE_2D, texG);
 	gluQuadricTexture(qobjz, true);
 	gluQuadricNormals(qobjz, GL_SMOOTH);
@@ -349,6 +424,7 @@ void silverCoin(float x, float y, float z) {
 	GLUquadricObj* qobjy;
 	qobjy = gluNewQuadric();
 	glTranslatef(x, y, z);
+	glScaled(2, 2, 2);
 	glBindTexture(GL_TEXTURE_2D, texS);
 	gluQuadricTexture(qobjy, true);
 	gluQuadricNormals(qobjy, GL_SMOOTH);
@@ -363,6 +439,7 @@ void bronzeCoin(float x, float y, float z) {
 	GLUquadricObj* qobjx;
 	qobjx = gluNewQuadric();
 	glTranslatef(x, y, z);
+	glScaled(2, 2, 2);
 	glBindTexture(GL_TEXTURE_2D, texC);
 	gluQuadricTexture(qobjx, true);
 	gluQuadricNormals(qobjx, GL_SMOOTH);
@@ -371,6 +448,83 @@ void bronzeCoin(float x, float y, float z) {
 	glPopMatrix();
 }
 
+void drawCat(float x, float y, float z) {
+	glPushMatrix();
+	glTranslatef(catx + x,caty+ y, catz+z);
+	glRotatef(180.f, 0, 1, 0);
+	glScalef(8, 8, -8);
+	model_cat.Draw();
+	glPopMatrix();
+
+	//std::cout << (catx+catx_add) << "x:\n";
+
+	//std::cout << (caty + caty_add) << "y:\n";
+
+	//std::cout << (catz + catz_add) << "z:\n";
+}
+
+void drawHellWall(float x, float y, float z) {
+	glColor3f(0, 0, 0);
+	glPushMatrix();
+	glTranslated(x,y,z);
+	glScaled(40, 7.5, 1);
+	glutSolidCube(1);
+	glPopMatrix();
+}
+
+void drawHellWallTex(float x, float y, float z) {
+	glDisable(GL_LIGHTING);	// Disable lighting 
+
+	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
+
+	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
+
+	glBindTexture(GL_TEXTURE_2D, tex_hell_wall.texture[0]);
+
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(0+x, 0+y, z);
+	glTexCoord2f(1, 0);
+	glVertex3f(2.5+x, 0+y, 0+z);
+	glTexCoord2f(1, 1);
+	glVertex3f(2.5+x, 7.5+y, 0+z);
+	glTexCoord2f(0, 1);
+	glVertex3f(0+x, 7.5+y, 0+z);
+	glEnd();
+	glPopMatrix();
+
+	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
+	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
+}
+
+void drawFire(float x, float y, float z) {
+	glDisable(GL_LIGHTING);	// Disable lighting 
+
+	//glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
+
+	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
+
+	glBindTexture(GL_TEXTURE_2D, tex_fire.texture[0]);
+
+	glPushMatrix();
+	glBegin(GL_TRIANGLES);
+	glNormal3f(0, 0, 1);	// Set normal direction.
+	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(0 + x, 0 + y, z);
+	glTexCoord2f(0, 1);
+	glVertex3f(1 + x, 0 + y, 0 + z);
+	glTexCoord2f(0.5, 0.5);
+	glVertex3f(0.5 + x, 6.5 + y, 0 + z);
+	glEnd();
+	glPopMatrix();
+
+	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
+	//glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
+}
 
 //=======================================================================
 // Display Function
@@ -389,155 +543,59 @@ void myDisplay(void)
 	// Draw Ground
 	RenderGround();
 
-	//glDisable(GL_LIGHTING);
 
-	// Draw Tree Model
-	glPushMatrix();
-	glTranslatef(10, 0, 0);
-	glScalef(0.7, 0.7, 0.7);
-	model_tree.Draw();
-	glPopMatrix();
+	//draw cat
+	drawCat(catx_add, caty_add, catz_add);
 
-	// Draw Tree Model
-	glPushMatrix();
-	glTranslatef(-10, 0, -1);
-	glScalef(0.7, 0.7, 0.7);
-	model_tree.Draw();
-	glPopMatrix();
+	//draw fire
+	drawFire(0, 0, 0);
+	
 
-	glPushMatrix();
-	glTranslatef(-10, 0, -2);
-	glScalef(0.7, 0.7, 0.7);
-	model_tree.Draw();
-	glPopMatrix();
+	//back wall
+	drawHellWall(0, 3.75, -20);
 
-	glPushMatrix();
-	glTranslatef(5, 0, -5);
-	glScalef(0.7, 0.7, 0.7);
-	model_tree.Draw();
-	glPopMatrix();
-
-	// Draw the character
-	glPushMatrix();
-	glTranslatef(5, 1.8, 17);
-	glRotatef(180.f, 0, 1, 0);
-	glScalef(1.3, 1.3, 1.3);
-	model_man.Draw();
-	glPopMatrix();
-
-	// Draw Fence Model
-	for (int i = 9.5; i > 5; i -= 0.8) {
-		glPushMatrix();
-		glTranslatef(i, 0, 7);
-		glScalef(0.9, 0.9, 0.9);
-		model_fence.Draw();
-		glPopMatrix();
+	for (int i = 0; i < 16;i++) {
+		drawHellWallTex(-20+(i*2.5), 0, 0.6 - 20);
 	}
 
-	// Draw the back of the Fence Model
+	//left wall
 	glPushMatrix();
-	glTranslatef(0, 0, -10);
-	glPushMatrix();
-	for (int i = -10; i < 10; i++) {
-		glPushMatrix();
-		glTranslatef(i, 0, 7);
-		glScalef(0.9, 0.9, 0.9);
-		model_fence.Draw();
-		glPopMatrix();
+	glRotated(90, 0, 1, 0);
+	drawHellWall(0, 3.75, -20);
+
+	for (int i = 0; i < 16;i++) {
+		drawHellWallTex(-20 + (i * 2.5), 0, 0.6 - 20);
 	}
 	glPopMatrix();
-	glPopMatrix();
 
-	// Draw the front of the Fence Model
-	for (int i = -10; i <= 0; i += 1) {
-		glPushMatrix();
-		glTranslatef(i, 0, 7);
-		glScalef(0.9, 0.9, 0.9);
-		model_fence.Draw();
-		glPopMatrix();
-	}
-
-	// Draw the left side of the Fence Model
-	for (int i = 0; i <= 6.9; i += 1.1) {
-		glPushMatrix();
-		glTranslatef(-10, 0, i);
-		glRotatef(90.f, 0, 1, 0);
-		glScalef(0.9, 0.9, 0.9);
-		model_fence.Draw();
-		glPopMatrix();
-	}
-
-	// Draw Fence Model
-	for (int i = 7; i > 1; i-=0.5) {
-        glPushMatrix();
-        glTranslatef(10, 0, i);
-        glRotatef(90.f, 0, 1, 0); 
-        glScalef(0.9, 0.9, 0.9);
-        model_fence.Draw();
-        glPopMatrix();
-	}
-
-	// Draw Fence Model
+	//right wall
 	glPushMatrix();
-	glTranslatef(10, 0, 1);
-	glRotatef(90.f, 0, 1, 0);
-	glScalef(0.9, 0.9, 0.9);
-	model_fence.Draw();
+	glRotated(-90, 0, 1, 0);
+	glTranslated(0, 0, 0);
+	drawHellWall(0, 3.75, -20);
+
+	for (int i = 0; i < 16;i++) {
+		drawHellWallTex(-20 + (i * 2.5), 0, 0.6 - 20);
+	}
 	glPopMatrix();
 
-    // Draw house Model
-	glPushMatrix();
-	glRotatef(90.f, 1, 0, 0);
-	model_house.Draw();
-	glPopMatrix();
-
-	// Draw the flowers that are in front of the house Model
-	for (int i = 0; i <= 15; i+=3) {
-		for (int j = 10; j <= 15; j += 3) {
-			glPushMatrix();
-			glTranslatef(i, 0, j);
-			glRotatef(40.f, 0, 1, 0);
-			glScalef(0.003, 0.003, 0.003);
-			model_flower.Draw();
-			glPopMatrix();
-		}
-	}
-
-	// Draw the back flowers bushes Model
-	for (int i = 10; i <= 15; i += 2) {
-		for (int j = -3; j <= 0; j += 2) {
-			glPushMatrix();
-			glTranslatef(i, 0, j);
-			glRotatef(40.f, 0, 1, 0);
-			glScalef(0.003, 0.003, 0.003);
-			model_flower.Draw();
-			glPopMatrix();
-		}
-	}
-
-	// coins
-	bronzeCoin(10, 1, 18);
-
-	// Silver coin
-	silverCoin(5, 1, 16);
 
 	// Gold coin
 	goldCoin(15, 1, 16);
 
 	//sky box
 	glPushMatrix();
-
+	//draw the panorama
 	GLUquadricObj* qobj;
 	qobj = gluNewQuadric();
 	glTranslated(70, 0, 0);
 	glRotated(240, 1, 0, 1);
 	glColor3f(0.831, 0.925, 0.988);
-	glBindTexture(GL_TEXTURE_2D, tex);
+	glBindTexture(GL_TEXTURE_2D, tex_sky.texture[0]);
 	gluQuadricTexture(qobj, true);
 	gluQuadricNormals(qobj, GL_SMOOTH);
 	gluSphere(qobj, 100, 200, 200);
 	gluDeleteQuadric(qobj);
-
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -618,21 +676,20 @@ void myReshape(int w, int h)
 void LoadAssets()
 {
 	// Loading Model files
-	model_tree.Load("Models/tree/Tree1.3ds");
-	model_fence.Load("Models/fence/fence.3ds");
-	model_flower.Load("Models/flower/plants.3ds");
-	model_house.Load("Models/house/house.3DS");
-	model_man.Load("Models/character/worker.3ds");
+	model_cat.Load("Models/cat/CatMac.3ds");
 
 
 	// Loading texture files
-	tex_ground.Load("Textures/ground.bmp"); // ground
-	loadBMP(&tex, "Textures/panoramic-view.bmp", false); // sky
-
+	tex_ground.Load("textures/hell-ground.bmp"); // ground
+	tex_sky.Load("textures/hell-ground.bmp"); // hell scene
+	tex_hell_wall.Load("textures/hell-wall.bmp");
+	tex_fire.Load("textures/fire.bmp");
+	
 	// coins textures
-	loadBMP(&texC, "Textures/bronze.bmp", false); // texture for bronze coin
-	loadBMP(&texG, "Textures/gold.bmp", false); // texture for gold coin
-	loadBMP(&texS, "Textures/silver.bmp", false); // texture for silver coin
+	loadBMP(&texC, "textures/bronze.bmp", false); // texture for bronze coin
+	loadBMP(&texG, "textures/gold.bmp", false); // texture for gold coin
+	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
+	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
 
 }
 
