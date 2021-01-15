@@ -173,8 +173,12 @@ float catz_add = 0;
 // garden scene variables
 bool clearGardenScene = false; // if true means that reached the house and clear lvl 1
 bool lvl_1 = true;
-int gardenSceneScore = 0;      // for the garden scene score calculations
+int score = 0;      // for the garden scene score calculations
 
+// coins taken ?
+bool goldCoinTaken = false;
+bool silverCoinTaken = false;
+bool bronzeCoinTaken = false;
 
 void sound(int reason) {
 	switch (reason) {
@@ -246,7 +250,6 @@ void Keyboard(unsigned char key, int x, int y) {
 }
 
 void Special(int key, int x, int y) {
-	
 
 	if (key == GLUT_KEY_UP) {
 
@@ -269,6 +272,21 @@ void Special(int key, int x, int y) {
 					lvl_1 = false;
 				}
 			}
+			// not goal? then check coins:
+			// bronze coin
+			//if(17 < temp + catz < 18){
+			//	if (9 < temp + catx < 10) {
+			//		bronzeCoinTaken = true;
+			//		score += 1;
+			//	}
+			//}
+			//// silver coin
+			//if (15 < temp + catz < 16) {
+			//	if (4 < temp + catx < 5) {
+			//		silverCoinTaken = true;
+			//		score += 2;
+			//	}
+			//}
 		}
 
 	}
@@ -635,8 +653,10 @@ void hellScene() {
 	glPopMatrix();
 
 
-	// Gold coin
-	goldCoin(15, 1, 16);
+	if (!goldCoinTaken) {
+		// Gold coin
+		goldCoin(15, 1, 16);
+	}
 
 	//sky box
 	glPushMatrix();
@@ -657,7 +677,7 @@ void hellScene() {
 void gardenScene() {
 	// Draw Ground
 	RenderGardenGround();
-
+	glEnable(GL_LIGHT0);
 	//draw cat
 	drawCat(catx_add, caty_add, catz_add);
 
@@ -780,13 +800,19 @@ void gardenScene() {
 	}
 
 	// coins
-	bronzeCoin(10, 1, 18);
+	if (!bronzeCoinTaken) {
+		bronzeCoin(10, 1, 18);
+	}
 
-	// Silver coin
-	silverCoin(5, 1, 16);
+	if (!silverCoinTaken) {
+		// Silver coin
+		silverCoin(5, 1, 16);
+	}
 
-	// Gold coin
-	goldCoin(15, 1, 16);
+	if (!goldCoinTaken) {
+		// Gold coin
+		goldCoin(15, 1, 16);
+	}
 
 	//sky box
 	glPushMatrix();
