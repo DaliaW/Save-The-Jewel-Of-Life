@@ -15,9 +15,11 @@
 int WIDTH = 1280;
 int HEIGHT = 720;
 
-GLuint texC;
-GLuint texG;
-GLuint texS;
+GLuint tex; // for the garden scene skybox
+
+GLuint texC; // for the bronze coin texture
+GLuint texG; // for the gold coin texture
+GLuint texS; // for the silver coin texture
 
 char title[] = "3D Model Loader Sample";
 
@@ -83,7 +85,7 @@ class Camera {
 public:
 	Vector3f eye, center, up;
 
-	Camera(float eyeX = 10.0f, float eyeY = 3.0f, float eyeZ = 20.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
+	Camera(float eyeX = 17.5f, float eyeY = 3.0f, float eyeZ = 18.0f, float centerX = 0.0f, float centerY = 0.0f, float centerZ = 0.0f, float upX = 0.0f, float upY = 1.0f, float upZ = 0.0f) {
 		eye = Vector3f(eyeX, eyeY, eyeZ);
 		center = Vector3f(centerX, centerY, centerZ);
 		up = Vector3f(upX, upY, upZ);
@@ -133,7 +135,7 @@ public:
 
 Camera camera;
 
-Vector Eye(20, 5, 20);
+Vector Eye(0, 0, 2);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
@@ -141,15 +143,20 @@ int cameraZoom = 0;
 
 //Model Variables
 Model_3DS model_cat;
+Model_3DS model_house;
+Model_3DS model_tree;
+Model_3DS model_fence;
+Model_3DS model_flower;
 
 
-
-// Textures
+// Textures for the hell scene
 GLTexture tex_ground;
 GLTexture tex_sky;
 GLTexture tex_hell_wall;
 GLTexture tex_fire;
 
+// Textures for the garden scene
+GLTexture tex_ground_grass;
 
 //cat movement
 
@@ -160,8 +167,9 @@ float catz_hell= -14;
 
 //for garden
 float catx = -17.5;
+// float catx = 17.5;  --> changed to the value above
 float caty = 0;
-float catz = -14;
+float catz = 18;
 
 //relative
 float catx_add_hell = 0;
@@ -173,24 +181,31 @@ float catx_add = 0;
 float caty_add= 0;
 float catz_add = 0;
 
+//<<<<<<< hell-scene
 //hellwall
 float wallx = 0;
 
 //<<<<<<< Updated upstream
 //=======
 // garden scene variables
-bool clearGardenScene = true; // if true means that reached the house and clear lvl 1
-bool lvl_1 = false;
+//bool clearGardenScene = true; // if true means that reached the house and clear lvl 1
+//bool lvl_1 = false;
+int score = 0;      // for the garden scene score calculations
+//int hellScore = 0; //to be added to garden score if level cleared
+bool hellLost = false;
+//=======
+// garden scene variables
+bool clearGardenScene = false; // if true means that reached the house and clear lvl 1
+bool lvl_1 = true;
 int score = 0;      // for the garden scene score calculations
 int hellScore = 0; //to be added to garden score if level cleared
-bool hellLost = false;
+float rotAng;
+//>>>>>>> main
 
 // coins taken ?
 bool goldCoinTaken = false;
 bool silverCoinTaken = false;
 bool bronzeCoinTaken = false;
-//>>>>>>> Stashed changes
-
 
 //coins taken? hell scene!
 bool gold1 = false;
@@ -211,12 +226,20 @@ void sound(int reason) {
 		PlaySound("sound_collide.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;*/
 
+// 	case 2: //collect coin
+// 		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
+// 		break;
+
+// 	case 3: //collect coin
+// 		PlaySound("sound_lost.wav", NULL, SND_FILENAME | SND_ASYNC);
+// 		break;
+
 	case 2: //collect coin
 		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
 
 	case 3: //collect coin
-		PlaySound("sound_lost.wav", NULL, SND_FILENAME | SND_ASYNC);
+		PlaySound("Evil_Laugh.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
 /*	
 	case 5: //background
@@ -229,7 +252,7 @@ void sound(int reason) {
 void setupCamera() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60, 640 / 480, 0.001, 1000000);
+	gluPerspective(72, 1, 1, 1000000);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -279,10 +302,10 @@ void Keyboard(unsigned char key, int x, int y) {
 }
 
 void Special(int key, int x, int y) {
-	
 
 	if (key == GLUT_KEY_UP) {
 
+//<<<<<<< hell-scene
 		
 		if (clearGardenScene) {
 			float temp = catz_add_hell - 0.5;
@@ -340,26 +363,34 @@ void Special(int key, int x, int y) {
 			}
 
 			std::cout << (hellScore) << "score\n";
+//=======
+		float temp = catz_add - 0.5;
+		if (temp + catz > -16) {
+			catz_add -= 0.5;
+			//camera.moveZ(-temp);
+			//sound(0);
+		}
+		else {
+			sound(1);
+		}
+		
+		if (lvl_1) {
+			// if reached the house then set the flag to true to clear lvl 1
+			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
+				clearGardenScene = true;
+				std::cout << (clearGardenScene) << "reached my goal:\n";
+				lvl_1 = false;
+				sound(3);
+			}
+		}
+//>>>>>>> main
 
 		}
 	}
 
+//<<<<<<< hell-scene
 
 	else if (key == GLUT_KEY_DOWN) {
-			
-
-
-		/*
-			if (lvl_1) {
-				// if reached the house then set the flag to true to clear lvl 1
-				if (0 < temp1 + catz < 1) {
-					if (0 < temp1 + catx < 1) {
-						clearGardenScene = true;
-						std::cout << (clearGardenScene) << "reached my goal:\n";
-						lvl_1 = false;
-					}
-				}
-			}*/
 
 			if (clearGardenScene) {
 				float temp1 = catz_add_hell + 0.5;
@@ -492,11 +523,44 @@ void Special(int key, int x, int y) {
 
 			std::cout << (hellScore) << "score\n";
 
+// =======
+// 	else if(key == GLUT_KEY_DOWN){
+// 		float temp1 = catz_add + 0.5;
+// 		if (temp1 + catz < 17.5) {
+// 			catz_add += 0.5;
+// 			//camera.moveZ(temp1);
+// 			//sound(0);
+// 		}
+// 		else {
+// 			sound(1);
+// 		}
+// 		if (lvl_1) {
+// 			// if reached the house then set the flag to true to clear lvl 1
+// 			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
+// 				clearGardenScene = true;
+// 				std::cout << (clearGardenScene) << "reached my goal:\n";
+// 				lvl_1 = false;
+// 				sound(3);
+// 			}
+// 		}
+// 	}
+// 	else if (key == GLUT_KEY_LEFT) {
+// 		float temp2 = catx_add - 0.5;
+// 		if (temp2 + catx > -18) {
+// 			catx_add -= 0.5;
+// 			//camera.moveX(-temp2);
+// 			//sound(0);
+// 		}
+// 		else {
+// 			sound(1);
+// >>>>>>> main
 		}
+
 	}
 
 
 	else if (key == GLUT_KEY_RIGHT) {
+//<<<<<<< hell-scene
 		
 		if (clearGardenScene) {
 
@@ -565,6 +629,16 @@ void Special(int key, int x, int y) {
 
 			std::cout << (hellScore) << "score\n";
 
+// =======
+// 		float temp3 = catx_add + 0.5;
+// 		if (temp3 + catx < 18) {
+// 			catx_add += 0.5;
+// 			//camera.moveX(temp3);
+// 			//sound(0);
+// 		}
+// 		else {
+// 			sound(1);
+// >>>>>>> main
 		}
 	}
 
@@ -595,7 +669,7 @@ void InitLightSource()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
 	// Finally, define light source 0 position in World Space
-	GLfloat light_position[] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	GLfloat light_position[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 }
 
@@ -631,7 +705,7 @@ void myInit(void)
 
 	glLoadIdentity();
 
-	gluPerspective(fovy, aspectRatio, zNear, zFar);
+	//gluPerspective(fovy, aspectRatio, zNear, zFar);
 	//*******************************************************************************************//
 	// fovy:			Angle between the bottom and top of the projectors, in degrees.			 //
 	// aspectRatio:		Ratio of width to height of the clipping plane.							 //
@@ -642,7 +716,7 @@ void myInit(void)
 
 	glLoadIdentity();
 
-	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+	//gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
 	//*******************************************************************************************//
 	// EYE (ex, ey, ez): defines the location of the camera.									 //
 	// AT (ax, ay, az):	 denotes the direction where the camera is aiming at.					 //
@@ -661,7 +735,7 @@ void myInit(void)
 //=======================================================================
 // Render Ground Function
 //=======================================================================
-void RenderGround()
+void RenderHellGround()
 {
 	glDisable(GL_LIGHTING);	// Disable lighting 
 
@@ -670,6 +744,35 @@ void RenderGround()
 	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
 
 	glBindTexture(GL_TEXTURE_2D, tex_ground.texture[0]);	// Bind the ground texture
+
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glNormal3f(0, 1, 0);	// Set quad normal direction.
+	glTexCoord2f(2, 2);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
+	glVertex3f(-20, 0, -20);
+	glTexCoord2f(5, 0);
+	glVertex3f(20, 0, -20);
+	glTexCoord2f(5, 5);
+	glVertex3f(20, 0, 20);
+	glTexCoord2f(0, 5);
+	glVertex3f(-20, 0, 20);
+	glEnd();
+	glPopMatrix();
+
+	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
+
+	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
+}
+
+void RenderGardenGround()
+{
+	glDisable(GL_LIGHTING);	// Disable lighting 
+
+	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
+
+	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
+
+	glBindTexture(GL_TEXTURE_2D, tex_ground_grass.texture[0]);	// Bind the ground texture
 
 	glPushMatrix();
 	glBegin(GL_QUADS);
@@ -737,6 +840,7 @@ void bronzeCoin(float x, float y, float z) {
 
 void drawCat(float x, float y, float z) {
 	glPushMatrix();
+//<<<<<<< hell-scene
 
 	if (clearGardenScene) {
 		glTranslatef(catx_add_hell + catx_hell, caty_add_hell + caty_hell, catz_add_hell + catz_hell);
@@ -749,12 +853,21 @@ void drawCat(float x, float y, float z) {
 		glPopMatrix();
 	}
 	
+//=======
+  else{
+	glTranslatef(catx + x,caty+ y, catz+z);
+	glRotatef(180.f, 0, 1, 0);
+	glScalef(3, 3, 3);
+	model_cat.Draw();
+	glPopMatrix();
+  }
+//>>>>>>> main
 
-	//std::cout << (catx+catx_add) << "x:\n";
+	std::cout << (catx+catx_add) << "x:\n";
 
-	//std::cout << (caty + caty_add) << "y:\n";
+	std::cout << (caty + caty_add) << "y:\n";
 
-	//std::cout << (catz + catz_add) << "z:\n";
+	std::cout << (catz + catz_add) << "z:\n";
 }
 
 void drawHellWall(float x, float y, float z) {
@@ -820,22 +933,9 @@ void drawFire(float x, float y, float z) {
 	//glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
 }
 
-//=======================================================================
-// Display Function
-//=======================================================================
-void myDisplay(void)
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
-	GLfloat lightPosition[] = { 0.0f, 100.0f, 0.0f, 0.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
-
-	setupCamera();
-
+void hellScene() {
 	// Draw Ground
-	RenderGround();
+	RenderHellGround();
 
 
 	//draw cat
@@ -843,13 +943,13 @@ void myDisplay(void)
 
 	//draw fire
 	drawFire(0, 0, 0);
-	
+
 
 	//back wall
 	drawHellWall(0, 3.75, -20);
 
 	for (int i = 0; i < 16;i++) {
-		drawHellWallTex(-20+(i*2.5), 0, 0.6 - 20);
+		drawHellWallTex(-20 + (i * 2.5), 0, 0.6 - 20);
 	}
 
 	//left wall
@@ -875,15 +975,10 @@ void myDisplay(void)
 
 ////////////////////////////////hell scene coins
 
-//<<<<<<< Updated upstream
-	// Gold coin
-	
-//=======
 	if (!gold1) {
 		// Gold coin
 		goldCoin(0, 3, 0);
 	}
-	
 	if (!gold2) {
 		// Gold coin
 		goldCoin(10, 3, 16);
@@ -899,16 +994,13 @@ void myDisplay(void)
 	}
 
 	if (!bronze1) {
+
 		bronzeCoin(1,3,5);
 	}
 
 	if (!bronze2) {
 		bronzeCoin(6,3,-2);
 	}
-
-
-	///////////////////////////////////////////
-//>>>>>>> Stashed changes
 
 	//sky box
 	glPushMatrix();
@@ -924,6 +1016,192 @@ void myDisplay(void)
 	gluSphere(qobj, 100, 200, 200);
 	gluDeleteQuadric(qobj);
 	glPopMatrix();
+}
+
+void gardenScene() {
+	// Draw Ground
+	RenderGardenGround();
+	// create a vector or array of floats
+	GLfloat light0Diffuse[] = { 0.6f,0.2f,0.2f,0 };
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diffuse);
+	//draw cat
+	drawCat(catx_add, caty_add, catz_add);
+
+	//glDisable(GL_LIGHTING);
+
+	// Draw Tree Model
+	glPushMatrix();
+	glTranslatef(10, 0, 0);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	// Draw Tree Model
+	glPushMatrix();
+	glTranslatef(-10, 0, -1);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-10, 0, -2);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(5, 0, -5);
+	glScalef(0.7, 0.7, 0.7);
+	model_tree.Draw();
+	glPopMatrix();
+
+	// Draw Fence Model
+	for (int i = 9.5; i > 5; i -= 0.8) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw the back of the Fence Model
+	glPushMatrix();
+	glTranslatef(0, 0, -10);
+	glPushMatrix();
+	for (int i = -10; i < 10; i++) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+	glPopMatrix();
+	glPopMatrix();
+
+	// Draw the front of the Fence Model
+	for (int i = -10; i <= 0; i += 1) {
+		glPushMatrix();
+		glTranslatef(i, 0, 7);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw the left side of the Fence Model
+	for (int i = 0; i <= 6.9; i += 1.1) {
+		glPushMatrix();
+		glTranslatef(-10, 0, i);
+		glRotatef(90.f, 0, 1, 0);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw Fence Model
+	for (int i = 7; i > 1; i -= 0.5) {
+		glPushMatrix();
+		glTranslatef(10, 0, i);
+		glRotatef(90.f, 0, 1, 0);
+		glScalef(0.9, 0.9, 0.9);
+		model_fence.Draw();
+		glPopMatrix();
+	}
+
+	// Draw Fence Model
+	glPushMatrix();
+	glTranslatef(10, 0, 1);
+	glRotatef(90.f, 0, 1, 0);
+	glScalef(0.9, 0.9, 0.9);
+	model_fence.Draw();
+	glPopMatrix();
+
+	// Draw house Model
+	glPushMatrix();
+	glRotatef(90.f, 1, 0, 0);
+	model_house.Draw();
+	glPopMatrix();
+
+	// Draw the flowers that are in front of the house Model
+	for (int i = 0; i <= 15; i += 3) {
+		for (int j = 10; j <= 15; j += 3) {
+			glPushMatrix();
+			glTranslatef(i, 0, j);
+			glRotatef(40.f, 0, 1, 0);
+			glScalef(0.003, 0.003, 0.003);
+			model_flower.Draw();
+			glPopMatrix();
+		}
+	}
+
+	// Draw the back flowers bushes Model
+	for (int i = 10; i <= 15; i += 2) {
+		for (int j = -3; j <= 0; j += 2) {
+			glPushMatrix();
+			glTranslatef(i, 0, j);
+			glRotatef(40.f, 0, 1, 0);
+			glScalef(0.003, 0.003, 0.003);
+			model_flower.Draw();
+			glPopMatrix();
+		}
+	}
+
+	// coins
+	if (!bronzeCoinTaken) {
+		bronzeCoin(10, 2, 16);
+	}
+
+	if (!silverCoinTaken) {
+		// Silver coin
+		silverCoin(5, 2, 16);
+	}
+
+	if (!goldCoinTaken) {
+		// Gold coin
+		goldCoin(15, 2, 16);
+	}
+
+	//sky box
+	glPushMatrix();
+
+	GLUquadricObj* qobj;
+	qobj = gluNewQuadric();
+	glTranslated(70, 0, 0);
+	glRotated(240, 1, 0, 1);
+	glColor3f(0.831, 0.925, 0.988);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	gluQuadricTexture(qobj, true);
+	gluQuadricNormals(qobj, GL_SMOOTH);
+	gluSphere(qobj, 100, 200, 200);
+	gluDeleteQuadric(qobj);
+
+	glPopMatrix();
+}
+
+//=======================================================================
+// Display Function
+//=======================================================================
+void myDisplay(void)
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	setupCamera();
+
+	// here we should set a flag if not house_target and timer == 0 then display garden scene
+	// otherwise display hell scene
+	if (!clearGardenScene) {
+		GLfloat lightIntensity[] = { 1, 0.6, 0.866, 1.0f };
+		GLfloat lightPosition[] = { rotAng,5.0f , 0.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
+		gardenScene();
+	}
+	else {
+		GLfloat lightIntensity[] = {1, 0.011, 0, 1.0f };
+		GLfloat lightPosition[] = { rotAng, 5.0f, 0.0f, 0.0f };
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
+		hellScene();
+	}
 
 	glutSwapBuffers();
 }
@@ -963,11 +1241,71 @@ void myMotion(int x, int y)
 //=======================================================================
 void myMouse(int button, int state, int x, int y)
 {
-	y = HEIGHT - y;
 
-	if (state == GLUT_DOWN)
+	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_UP))
 	{
-		cameraZoom = y;
+		caty_add -= 3;
+		if (catx_add + catx > 13 && catx_add + catx < 16 && catz_add + catz > 14 && catz_add + catz < 17) {
+			score += 3;
+			goldCoinTaken = true;
+			sound(2);
+		}
+		if (catx_add + catx > 3 && catx_add + catx < 6 && catz_add + catz > 14 && catz_add + catz < 17) {
+			score += 2;
+			silverCoinTaken = true;
+			sound(2);
+		}
+		if (catx_add + catx > 9 && catx_add + catx < 11 && catz_add + catz > 14 && catz_add + catz < 17) {
+			score += 1;
+			bronzeCoinTaken = true;
+			sound(2);
+		}
+
+	if (clearGardenScene) {
+		if (catx_add + catx > 0 && catx_add + catx < 3 && catz_add + catz > 0 && catz_add + catz < 3) {
+			// Gold coin
+			hellScore += 3;
+			gold1 = true;
+			sound(2);
+		}
+
+		if (catx_add + catx > 10 && catx_add + catx < 13 && catz_add + catz > 16 && catz_add + catz < 19) {
+			// Gold coin
+			//goldCoin(10, 3, 16);
+			hellScore += 3;
+			gold2 = true;
+			sound(2);
+		}
+
+
+		if (catx_add + catx > -9 && catx_add + catx < -6 && catz_add + catz > 8 && catz_add + catz < 11) {
+			//silverCoin(-9, 3, 8);
+			hellScore += 2;
+			silver1 = true;
+			sound(2);
+		}
+
+		if (catx_add + catx > -8 && catx_add + catx < -5 && catz_add + catz > -16 && catz_add + catz < -13) {
+			//silverCoin(-8, 3, -16);
+			hellScore += 2;
+			silver2 = true;
+			sound(2);
+		}
+
+		if (catx_add + catx > 1 && catx_add + catx < 4 && catz_add + catz > 5 && catz_add + catz < 8) {
+			//bronzeCoin(1, 3, 5);
+			hellScore += 1;
+			bronze1 = true;
+			sound(2);
+		}
+
+		std::cout << (hellScore) << "score\n";
+	}
+
+	}
+	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN))
+	{
+		caty_add += 3;
 	}
 }
 
@@ -989,12 +1327,12 @@ void myReshape(int w, int h)
 	// set up the projection matrix 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(fovy, (GLdouble)WIDTH / (GLdouble)HEIGHT, zNear, zFar);
+	//gluPerspective(fovy, (GLdouble)WIDTH / (GLdouble)HEIGHT, zNear, zFar);
 
 	// go back to modelview matrix so we can move the objects about
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+	//gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
 }
 
 //=======================================================================
@@ -1005,8 +1343,17 @@ void LoadAssets()
 	// Loading Model files
 	model_cat.Load("Models/cat/CatMac.3ds");
 
+	// garden scene models
+	model_tree.Load("Models/tree/Tree1.3ds");
+	model_fence.Load("Models/fence/fence.3ds");
+	model_flower.Load("Models/flower/plants.3ds");
+	model_house.Load("Models/house/house.3DS");
 
-	// Loading texture files
+	// Loading texture files for garden scene
+	tex_ground_grass.Load("Textures/ground.bmp"); // ground
+	loadBMP(&tex, "Textures/panoramic-view.bmp", false); // sky
+
+	// Loading texture files for hell scene
 	tex_ground.Load("textures/hell-ground.bmp"); // ground
 	tex_sky.Load("textures/hell-ground.bmp"); // hell scene
 	tex_hell_wall.Load("textures/hell-wall.bmp");
@@ -1014,11 +1361,11 @@ void LoadAssets()
 	
 	// coins textures
 	loadBMP(&texC, "textures/bronze.bmp", false); // texture for bronze coin
-	loadBMP(&texG, "textures/gold.bmp", false); // texture for gold coin
-	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
+	loadBMP(&texG, "textures/gold.bmp", false);   // texture for gold coin
 	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
 
 }
+//<<<<<<< hell-scene
 
 
 void wall_collapse(int useless) {
@@ -1027,6 +1374,15 @@ void wall_collapse(int useless) {
 	glutPostRedisplay();
 }
 
+//=======
+//=======================================================================
+// Light animation Function
+//=======================================================================
+void Anim() {
+	rotAng += 0.05;
+	glutPostRedisplay();
+}
+//>>>>>>> main
 //=======================================================================
 // Main Function
 //=======================================================================
@@ -1053,6 +1409,9 @@ void main(int argc, char** argv)
 	glutMouseFunc(myMouse);
 
 	glutReshapeFunc(myReshape);
+
+	glutIdleFunc(Anim);
+
 
 	myInit();
 
