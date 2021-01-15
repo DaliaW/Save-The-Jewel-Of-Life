@@ -203,6 +203,10 @@ void sound(int reason) {
 	case 2: //collect coin
 		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
+
+	case 3: //collect coin
+		PlaySound("Evil_Laugh.wav", NULL, SND_FILENAME | SND_ASYNC);
+		break;
 /*	
 	case 5: //background
 		mciSendString(L"open \"sound_bg.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
@@ -283,7 +287,7 @@ void Special(int key, int x, int y) {
 				clearGardenScene = true;
 				std::cout << (clearGardenScene) << "reached my goal:\n";
 				lvl_1 = false;
-
+				sound(3);
 			}
 		}
 
@@ -306,7 +310,7 @@ void Special(int key, int x, int y) {
 				clearGardenScene = true;
 				std::cout << (clearGardenScene) << "reached my goal:\n";
 				lvl_1 = false;
-				
+				sound(3);
 			}
 			if (catx_add + catx > 13 && catx_add + catx < 16 && catz_add + catz > 14 && catz_add + catz < 17) {
 				score += 3;
