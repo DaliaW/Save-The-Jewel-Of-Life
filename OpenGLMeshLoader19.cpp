@@ -163,6 +163,29 @@ float catx_add = 0;
 float caty_add = 0;
 float catz_add = 0;
 
+<<<<<<< Updated upstream
+=======
+// garden scene variables
+bool clearGardenScene = true; // if true means that reached the house and clear lvl 1
+bool lvl_1 = false;
+int score = 0;      // for the garden scene score calculations
+int hellScore = 0; //to be added to garden score if level cleared
+
+// coins taken ?
+bool goldCoinTaken = false;
+bool silverCoinTaken = false;
+bool bronzeCoinTaken = false;
+>>>>>>> Stashed changes
+
+
+//coins taken? hell scene!
+bool gold1 = false;
+bool gold2 = false;
+bool silver1 = false;
+bool silver2 = false;
+bool bronze1 = false;
+bool bronze2 = false;
+
 
 void sound(int reason) {
 	switch (reason) {
@@ -172,6 +195,10 @@ void sound(int reason) {
 
 	case 1: //cat collides
 		PlaySound("sound_collide.wav", NULL, SND_FILENAME | SND_ASYNC);
+		break;
+
+	case 2: //collect coin
+		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
 /*	
 	case 5: //background
@@ -258,6 +285,71 @@ void Special(int key, int x, int y) {
 		else {
 			sound(1);
 		}
+<<<<<<< Updated upstream
+=======
+
+		if (lvl_1) {
+			// if reached the house then set the flag to true to clear lvl 1
+			if (0 < temp1 + catz < 1) {
+				if (0 < temp1 + catx < 1) {
+					clearGardenScene = true;
+					std::cout << (clearGardenScene) << "reached my goal:\n";
+					lvl_1 = false;
+				}
+			}
+		}
+
+		if (clearGardenScene) {
+			if (catx_add + catx > 0 && catx_add + catx < 3 && catz_add + catz > 0 && catz_add + catz < 3) {
+				// Gold coin
+				hellScore += 3;
+				gold1 = true;
+				sound(2);
+			}
+
+			if (catx_add + catx > 10 && catx_add + catx < 13 && catz_add + catz > 16 && catz_add + catz < 19) {
+				// Gold coin
+				//goldCoin(10, 3, 16);
+				hellScore += 3;
+				gold2 = true;
+				sound(2);
+			}
+
+
+			if (catx_add + catx > -9 && catx_add + catx < -6 && catz_add + catz > 8 && catz_add + catz < 11) {
+				//silverCoin(-9, 3, 8);
+				hellScore += 2;
+				silver1 = true;
+				sound(2);
+			}
+
+			if (catx_add + catx > -8 && catx_add + catx < -5 && catz_add + catz > -16 && catz_add + catz < -13) {
+				//silverCoin(-8, 3, -16);
+				hellScore += 2;
+				silver2 = true;
+				sound(2);
+			}
+
+			if (catx_add + catx > 1 && catx_add + catx < 4 && catz_add + catz > 5 && catz_add + catz < 8) {
+				//bronzeCoin(1, 3, 5);
+				hellScore += 1;
+				bronze1 = true;
+				sound(2);
+			}
+
+			if (!bronze2) {
+				//bronzeCoin(6, 3, -2);
+				hellScore += 1;
+				bronze2 = true;
+				sound(2);
+			}
+
+			std::cout << (hellScore) << "score\n";
+		}
+
+		
+		
+>>>>>>> Stashed changes
 	}
 	else if (key == GLUT_KEY_LEFT) {
 		float temp2 = catx_add - 0.5;
@@ -452,7 +544,11 @@ void drawCat(float x, float y, float z) {
 	glPushMatrix();
 	glTranslatef(catx + x,caty+ y, catz+z);
 	glRotatef(180.f, 0, 1, 0);
+<<<<<<< Updated upstream
 	glScalef(8, 8, -8);
+=======
+	glScalef(8, 8, 8);
+>>>>>>> Stashed changes
 	model_cat.Draw();
 	glPopMatrix();
 
@@ -579,9 +675,42 @@ void myDisplay(void)
 	}
 	glPopMatrix();
 
+////////////////////////////////hell scene coins
 
+<<<<<<< Updated upstream
 	// Gold coin
 	goldCoin(15, 1, 16);
+=======
+	if (!gold1) {
+		// Gold coin
+		goldCoin(0, 3, 0);
+	}
+	
+	if (!gold2) {
+		// Gold coin
+		goldCoin(10, 3, 16);
+	}
+
+
+	if (!silver1) {
+		silverCoin(-9, 3, 8);
+	}
+
+	if (!silver2) {
+		silverCoin(-8, 3, -16);
+	}
+
+	if (!bronze1) {
+		bronzeCoin(1,3,5);
+	}
+
+	if (!bronze2) {
+		bronzeCoin(6,3,-2);
+	}
+
+
+	///////////////////////////////////////////
+>>>>>>> Stashed changes
 
 	//sky box
 	glPushMatrix();
