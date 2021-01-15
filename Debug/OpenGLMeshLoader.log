@@ -1,9 +1,5 @@
 ﻿  OpenGLMeshLoader19.cpp
 C:\Users\Dalia\source\repos\New folder (2)\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 C:\Users\Dalia\source\repos\New folder (2)\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-C:\Users\Dalia\source\repos\New folder (2)\OpenGLMeshLoader19.cpp(268,10): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\Dalia\source\repos\New folder (2)\OpenGLMeshLoader19.cpp(269,11): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\Dalia\source\repos\New folder (2)\OpenGLMeshLoader19.cpp(307,10): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\Dalia\source\repos\New folder (2)\OpenGLMeshLoader19.cpp(308,11): warning C4804: '<': unsafe use of type 'bool' in operation
 GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
   OpenGLMeshLoader.vcxproj -> C:\Users\Dalia\source\repos\New folder (2)\Debug\OpenGLMeshLoader19.exe
