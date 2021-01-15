@@ -279,12 +279,11 @@ void Special(int key, int x, int y) {
 		
 		if (lvl_1) {
 			// if reached the house then set the flag to true to clear lvl 1
-			if (0 < temp + catz < 1) {
-				if (0 < temp + catx < 1) {
-					clearGardenScene = true;
-					std::cout << (clearGardenScene) << "reached my goal:\n";
-					lvl_1 = false;
-				}
+			if (catx_add + catx > -2 && catx_add + catx < 1 && catz_add + catz > 1 && catz_add + catz < 2) {
+				clearGardenScene = true;
+				std::cout << (clearGardenScene) << "reached my goal:\n";
+				lvl_1 = false;
+
 			}
 		}
 
@@ -303,12 +302,11 @@ void Special(int key, int x, int y) {
 
 		if (lvl_1) {
 			// if reached the house then set the flag to true to clear lvl 1
-			if (0 < temp1 + catz < 1) {
-				if (0 < temp1 + catx < 1) {
-					clearGardenScene = true;
-					std::cout << (clearGardenScene) << "reached my goal:\n";
-					lvl_1 = false;
-				}
+			if (catx_add + catx > -2 && catx_add + catx < 1 && catz_add + catz > 1 && catz_add + catz < 2) {
+				clearGardenScene = true;
+				std::cout << (clearGardenScene) << "reached my goal:\n";
+				lvl_1 = false;
+				
 			}
 			if (catx_add + catx > 13 && catx_add + catx < 16 && catz_add + catz > 14 && catz_add + catz < 17) {
 				score += 3;
