@@ -1,16 +1,7 @@
 ﻿  OpenGLMeshLoader19.cpp
-<<<<<<< Updated upstream
-C:\Users\basan\Desktop\hell scene\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-C:\Users\basan\Desktop\hell scene\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
-  OpenGLMeshLoader.vcxproj -> C:\Users\basan\Desktop\hell scene\Debug\OpenGLMeshLoader19.exe
-=======
 C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\OpenGLMeshLoader19.cpp(283,27): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\OpenGLMeshLoader19.cpp(284,28): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\OpenGLMeshLoader19.cpp(322,28): warning C4804: '<': unsafe use of type 'bool' in operation
-C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\OpenGLMeshLoader19.cpp(323,29): warning C4804: '<': unsafe use of type 'bool' in operation
 GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
+Model_3DS.obj : warning LNK4204: 'C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\Debug\vc142.pdb' is missing debugging information for referencing module; linking object as if no debug info
+GLTexture.obj : warning LNK4204: 'C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\Debug\vc142.pdb' is missing debugging information for referencing module; linking object as if no debug info
   OpenGLMeshLoader.vcxproj -> C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\Debug\OpenGLMeshLoader19.exe
->>>>>>> Stashed changes
