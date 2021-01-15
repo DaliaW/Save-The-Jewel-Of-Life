@@ -8,3 +8,5 @@ C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\Debug\OpenGLMeshLoader19.exe
 C:\Users\basan\Desktop\Save-The-Jewel-Of-Life\Debug\OpenGLMeshLoader19.pdb
 C:\Users\basan\Desktop\hell scene\Debug\OpenGLMeshLoader19.exe
 C:\Users\basan\Desktop\hell scene\Debug\OpenGLMeshLoader19.pdb
+C:\Users\Dalia\source\repos\GraphicsFinal\Debug\OpenGLMeshLoader19.exe
+C:\Users\Dalia\source\repos\GraphicsFinal\Debug\OpenGLMeshLoader19.pdb

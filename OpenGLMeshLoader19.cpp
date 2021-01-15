@@ -21,7 +21,7 @@ GLuint texC; // for the bronze coin texture
 GLuint texG; // for the gold coin texture
 GLuint texS; // for the silver coin texture
 
-char title[] = "3D Model Loader Sample";
+char title[] = "Save the jewel of life";
 
 // 3D Projection Options
 GLdouble fovy = 45.0;
@@ -190,7 +190,7 @@ float wallx = 0;
 // garden scene variables
 //bool clearGardenScene = true; // if true means that reached the house and clear lvl 1
 //bool lvl_1 = false;
-int score = 0;      // for the garden scene score calculations
+//int score = 0;      // for the garden scene score calculations
 //int hellScore = 0; //to be added to garden score if level cleared
 bool hellLost = false;
 //=======
@@ -305,8 +305,6 @@ void Special(int key, int x, int y) {
 
 	if (key == GLUT_KEY_UP) {
 
-//<<<<<<< hell-scene
-		
 		if (clearGardenScene) {
 			float temp = catz_add_hell - 0.5;
 			if (temp + catz_hell > -16) {
@@ -361,47 +359,299 @@ void Special(int key, int x, int y) {
 				bronze2 = true;
 				sound(2);
 			}
+		}
+			//std::cout << (hellScore) << "score\n";
+			else {
+				float temp = catz_add - 0.5;
+				if (temp + catz > -16) {
+					catz_add -= 0.5;
+					//camera.moveZ(-temp);
+					//sound(0);
+				}
+				else {
+					sound(1);
+				}
 
-			std::cout << (hellScore) << "score\n";
-//=======
-		float temp = catz_add - 0.5;
-		if (temp + catz > -16) {
-			catz_add -= 0.5;
-			//camera.moveZ(-temp);
-			//sound(0);
-		}
-		else {
-			sound(1);
-		}
-		
-		if (lvl_1) {
-			// if reached the house then set the flag to true to clear lvl 1
-			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
-				clearGardenScene = true;
-				std::cout << (clearGardenScene) << "reached my goal:\n";
-				lvl_1 = false;
-				sound(3);
+				if (lvl_1) {
+					// if reached the house then set the flag to true to clear lvl 1
+					if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
+						clearGardenScene = true;
+						std::cout << (clearGardenScene) << "reached my goal:\n";
+						lvl_1 = false;
+						sound(3);
+					}
+				}
 			}
-		}
-//>>>>>>> main
 
-		}
+
+		
 	}
 
 //<<<<<<< hell-scene
 
 	else if (key == GLUT_KEY_DOWN) {
 
-			if (clearGardenScene) {
-				float temp1 = catz_add_hell + 0.5;
-				if (temp1 + catz_hell < 17.5) {
-					catz_add_hell += 0.5;
-					//sound(0);
-				}
-				else {
-					//sound(1);
-				}
+		if (clearGardenScene) {
+			float temp1 = catz_add_hell + 0.5;
+			if (temp1 + catz_hell < 17.5) {
+				catz_add_hell += 0.5;
+				//sound(0);
+			}
+			else {
+				//sound(1);
+			}
+		}
+		else {
+		   float temp1 = catz_add + 0.5;
+ 		   if (temp1 + catz < 17.5) {
+ 			catz_add += 0.5;
+ 			//camera.moveZ(temp1);
+ 			//sound(0);
+ 		   }
+ 		   else {
+ 			  sound(1);
+ 		   }
+		}
+			//	if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
+			//		// Gold coin
+			//		hellScore += 3;
+			//		gold1 = true;
+			//		sound(2);
+			//	}
 
+			//	if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
+			//		// Gold coin
+			//		//goldCoin(10, 3, 16);
+			//		hellScore += 3;
+			//		gold2 = true;
+			//		sound(2);
+			//	}
+
+
+			//	if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
+			//		//silverCoin(-9, 3, 8);
+			//		hellScore += 2;
+			//		silver1 = true;
+			//		sound(2);
+			//	}
+
+			//	if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
+			//		//silverCoin(-8, 3, -16);
+			//		hellScore += 2;
+			//		silver2 = true;
+			//		sound(2);
+			//	}
+
+			//	if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
+			//		//bronzeCoin(1, 3, 5);
+			//		hellScore += 1;
+			//		bronze1 = true;
+			//		sound(2);
+			//	}
+
+			//	if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
+			//		//bronzeCoin(6, 3, -2);
+			//		hellScore += 1;
+			//		bronze2 = true;
+			//		sound(2);
+			//	}
+
+
+			//	std::cout << (hellScore) << "score\n";
+
+			//}
+
+
+	}
+
+	
+	else if (key == GLUT_KEY_LEFT) {
+		
+
+		if (clearGardenScene) {
+
+			float temp2 = catx_add_hell - 0.5;
+			if (temp2 + catx_hell > -18) {
+				catx_add_hell -= 0.5;
+				//sound(0);
+			}
+			else {
+				//sound(1);
+			}
+			std::cout << (hellLost) << "\n";
+
+			if (((catx_add_hell + catx_hell) < ((wallx - 20)) || ((catx_add_hell + catx_hell) > (-(wallx)+20)))) {
+				//so if the cat hits the wall
+				hellLost = true;
+				sound(3);
+			}
+
+			//if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
+			//	// Gold coin
+			//	hellScore += 3;
+			//	gold1 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
+			//	// Gold coin
+			//	//goldCoin(10, 3, 16);
+			//	hellScore += 3;
+			//	gold2 = true;
+			//	sound(2);
+			//}
+
+
+			//if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
+			//	//silverCoin(-9, 3, 8);
+			//	hellScore += 2;
+			//	silver1 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
+			//	//silverCoin(-8, 3, -16);
+			//	hellScore += 2;
+			//	silver2 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
+			//	//bronzeCoin(1, 3, 5);
+			//	hellScore += 1;
+			//	bronze1 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
+			//	//bronzeCoin(6, 3, -2);
+			//	hellScore += 1;
+			//	bronze2 = true;
+			//	sound(2);
+			//}
+
+// =======
+// 	else if(key == GLUT_KEY_DOWN){
+// 		float temp1 = catz_add + 0.5;
+// 		if (temp1 + catz < 17.5) {
+// 			catz_add += 0.5;
+// 			//camera.moveZ(temp1);
+// 			//sound(0);
+// 		}
+// 		else {
+// 			sound(1);
+// 		}
+// 		if (lvl_1) {
+// 			// if reached the house then set the flag to true to clear lvl 1
+// 			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
+// 				clearGardenScene = true;
+// 				std::cout << (clearGardenScene) << "reached my goal:\n";
+// 				lvl_1 = false;
+// 				sound(3);
+// 			}
+// 		}
+// 	}
+// 	else if (key == GLUT_KEY_LEFT) {
+// 		float temp2 = catx_add - 0.5;
+// 		if (temp2 + catx > -18) {
+// 			catx_add -= 0.5;
+// 			//camera.moveX(-temp2);
+// 			//sound(0);
+// 		}
+// 		else {
+// 			sound(1);
+// >>>>>>> main
+		}
+		else {
+		   float temp2 = catx_add - 0.5;
+ 		   if (temp2 + catx > -18) {
+ 			catx_add -= 0.5;
+ 			//camera.moveX(-temp2);
+ 			//sound(0);
+ 		   }
+		   else {
+			   sound(1);
+		   }
+	    }
+
+	}
+
+
+	else if (key == GLUT_KEY_RIGHT) {
+		
+		if (clearGardenScene) {
+
+			float temp3 = catx_add_hell + 0.5;
+			  if (temp3 + catx_hell < 18) {
+				catx_add_hell += 0.5;
+				//sound(0);
+			  }
+			  else {
+				//sound(1);
+			  }
+
+			std::cout << (hellLost) << "\n";
+
+			if (((catx_add_hell + catx_hell) < ((wallx - 20)) || ((catx_add_hell + catx_hell) > (-(wallx)+20)))) {
+				//so if the cat hits the wall
+				hellLost = true;
+				sound(3);
+			}
+
+//<<<<<<< Updated upstream
+			//if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
+			//	// Gold coin
+			//	hellScore += 3;
+			//	gold1 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
+			//	// Gold coin
+			//	//goldCoin(10, 3, 16);
+			//	hellScore += 3;
+			//	gold2 = true;
+			//	sound(2);
+			//}
+
+
+			//if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
+			//	//silverCoin(-9, 3, 8);
+			//	hellScore += 2;
+			//	silver1 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
+			//	//silverCoin(-8, 3, -16);
+			//	hellScore += 2;
+			//	silver2 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
+			//	//bronzeCoin(1, 3, 5);
+			//	hellScore += 1;
+			//	bronze1 = true;
+			//	sound(2);
+			//}
+
+			//if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
+			//	//bronzeCoin(6, 3, -2);
+			//	hellScore += 1;
+			//	bronze2 = true;
+			//	sound(2);
+			//}
+
+
+			//std::cout << (hellScore) << "score\n";
+		}
+		else {
+			float temp3 = catx_add + 0.5;
+			if (temp3 + catx < 18) {
+				catx_add += 0.5;
+				//camera.moveX(temp3);
+				//sound(0);
 				if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
 					// Gold coin
 					hellScore += 3;
@@ -437,208 +687,12 @@ void Special(int key, int x, int y) {
 					hellScore += 1;
 					bronze1 = true;
 					sound(2);
+					//>>>>>>> Stashed changes
 				}
-
-				if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
-					//bronzeCoin(6, 3, -2);
-					hellScore += 1;
-					bronze2 = true;
-					sound(2);
+				else {
+					sound(1);
 				}
-
-
-				std::cout << (hellScore) << "score\n";
-
 			}
-
-
-		}
-
-	
-	else if (key == GLUT_KEY_LEFT) {
-		
-
-		if (clearGardenScene) {
-
-			float temp2 = catx_add_hell - 0.5;
-			if (temp2 + catx_hell > -18) {
-				catx_add_hell -= 0.5;
-				//sound(0);
-			}
-			else {
-				//sound(1);
-			}
-			std::cout << (hellLost) << "\n";
-
-			if (((catx_add_hell + catx_hell) < ((wallx - 20)) || ((catx_add_hell + catx_hell) > (-(wallx)+20)))) {
-				//so if the cat hits the wall
-				hellLost = true;
-				sound(3);
-			}
-
-			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
-				// Gold coin
-				hellScore += 3;
-				gold1 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
-				// Gold coin
-				//goldCoin(10, 3, 16);
-				hellScore += 3;
-				gold2 = true;
-				sound(2);
-			}
-
-
-			if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
-				//silverCoin(-9, 3, 8);
-				hellScore += 2;
-				silver1 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
-				//silverCoin(-8, 3, -16);
-				hellScore += 2;
-				silver2 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
-				//bronzeCoin(1, 3, 5);
-				hellScore += 1;
-				bronze1 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
-				//bronzeCoin(6, 3, -2);
-				hellScore += 1;
-				bronze2 = true;
-				sound(2);
-			}
-
-
-			std::cout << (hellScore) << "score\n";
-
-// =======
-// 	else if(key == GLUT_KEY_DOWN){
-// 		float temp1 = catz_add + 0.5;
-// 		if (temp1 + catz < 17.5) {
-// 			catz_add += 0.5;
-// 			//camera.moveZ(temp1);
-// 			//sound(0);
-// 		}
-// 		else {
-// 			sound(1);
-// 		}
-// 		if (lvl_1) {
-// 			// if reached the house then set the flag to true to clear lvl 1
-// 			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
-// 				clearGardenScene = true;
-// 				std::cout << (clearGardenScene) << "reached my goal:\n";
-// 				lvl_1 = false;
-// 				sound(3);
-// 			}
-// 		}
-// 	}
-// 	else if (key == GLUT_KEY_LEFT) {
-// 		float temp2 = catx_add - 0.5;
-// 		if (temp2 + catx > -18) {
-// 			catx_add -= 0.5;
-// 			//camera.moveX(-temp2);
-// 			//sound(0);
-// 		}
-// 		else {
-// 			sound(1);
-// >>>>>>> main
-		}
-
-	}
-
-
-	else if (key == GLUT_KEY_RIGHT) {
-//<<<<<<< hell-scene
-		
-		if (clearGardenScene) {
-
-			float temp3 = catx_add_hell + 0.5;
-			if (temp3 + catx_hell < 18) {
-				catx_add_hell += 0.5;
-				//sound(0);
-			}
-			else {
-				//sound(1);
-			}
-
-			std::cout << (hellLost) << "\n";
-
-			if (((catx_add_hell + catx_hell) < ((wallx - 20)) || ((catx_add_hell + catx_hell) > (-(wallx)+20)))) {
-				//so if the cat hits the wall
-				hellLost = true;
-				sound(3);
-			}
-
-			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
-				// Gold coin
-				hellScore += 3;
-				gold1 = true;
-				sound(2);
-			}
-
-			g
-			if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
-				// Gold coin
-				//goldCoin(10, 3, 16);
-				hellScore += 3;
-				gold2 = true;
-				sound(2);
-			}
-
-
-			if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
-				//silverCoin(-9, 3, 8);
-				hellScore += 2;
-				silver1 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
-				//silverCoin(-8, 3, -16);
-				hellScore += 2;
-				silver2 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
-				//bronzeCoin(1, 3, 5);
-				hellScore += 1;
-				bronze1 = true;
-				sound(2);
-			}
-
-			if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
-				//bronzeCoin(6, 3, -2);
-				hellScore += 1;
-				bronze2 = true;
-				sound(2);
-			}
-
-
-			std::cout << (hellScore) << "score\n";
-
-// =======
-// 		float temp3 = catx_add + 0.5;
-// 		if (temp3 + catx < 18) {
-// 			catx_add += 0.5;
-// 			//camera.moveX(temp3);
-// 			//sound(0);
-// 		}
-// 		else {
-// 			sound(1);
-// >>>>>>> main
 		}
 	}
 
@@ -1261,46 +1315,63 @@ void myMouse(int button, int state, int x, int y)
 			sound(2);
 		}
 
-	if (clearGardenScene) {
-		if (catx_add + catx > 0 && catx_add + catx < 3 && catz_add + catz > 0 && catz_add + catz < 3) {
-			// Gold coin
-			hellScore += 3;
-			gold1 = true;
-			sound(2);
+		if (clearGardenScene) {
+			float temp = catz_add_hell - 0.5;
+			if (temp + catz_hell > -16) {
+				catz_add_hell -= 0.5;
+				//sound(0);
+			}
+			else {
+				//sound(1);
+			}
+
+
+			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
+				// Gold coin
+				hellScore += 3;
+				gold1 = true;
+				sound(2);
+			}
+
+			if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
+				// Gold coin
+				//goldCoin(10, 3, 16);
+				hellScore += 3;
+				gold2 = true;
+				sound(2);
+			}
+
+
+			if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
+				//silverCoin(-9, 3, 8);
+				hellScore += 2;
+				silver1 = true;
+				sound(2);
+			}
+
+			if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
+				//silverCoin(-8, 3, -16);
+				hellScore += 2;
+				silver2 = true;
+				sound(2);
+			}
+
+			if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
+				//bronzeCoin(1, 3, 5);
+				hellScore += 1;
+				bronze1 = true;
+				sound(2);
+			}
+
+			if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
+				//bronzeCoin(6, 3, -2);
+				hellScore += 1;
+				bronze2 = true;
+				sound(2);
+			}
+
+			std::cout << (hellScore) << "score\n";
 		}
-
-		if (catx_add + catx > 10 && catx_add + catx < 13 && catz_add + catz > 16 && catz_add + catz < 19) {
-			// Gold coin
-			//goldCoin(10, 3, 16);
-			hellScore += 3;
-			gold2 = true;
-			sound(2);
-		}
-
-
-		if (catx_add + catx > -9 && catx_add + catx < -6 && catz_add + catz > 8 && catz_add + catz < 11) {
-			//silverCoin(-9, 3, 8);
-			hellScore += 2;
-			silver1 = true;
-			sound(2);
-		}
-
-		if (catx_add + catx > -8 && catx_add + catx < -5 && catz_add + catz > -16 && catz_add + catz < -13) {
-			//silverCoin(-8, 3, -16);
-			hellScore += 2;
-			silver2 = true;
-			sound(2);
-		}
-
-		if (catx_add + catx > 1 && catx_add + catx < 4 && catz_add + catz > 5 && catz_add + catz < 8) {
-			//bronzeCoin(1, 3, 5);
-			hellScore += 1;
-			bronze1 = true;
-			sound(2);
-		}
-
-		std::cout << (hellScore) << "score\n";
-	}
 
 	}
 	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN))
