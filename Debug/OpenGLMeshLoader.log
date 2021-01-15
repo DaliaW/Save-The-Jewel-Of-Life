@@ -1,5 +1,8 @@
 ﻿  OpenGLMeshLoader19.cpp
 C:\Users\Dalia\source\repos\GraphicsFinal\TextureBuilder.h(27,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 C:\Users\Dalia\source\repos\GraphicsFinal\TextureBuilder.h(28,52): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+C:\Users\Dalia\source\repos\GraphicsFinal\OpenGLMeshLoader19.cpp(1342,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Dalia\source\repos\GraphicsFinal\OpenGLMeshLoader19.cpp(1350,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\Dalia\source\repos\GraphicsFinal\OpenGLMeshLoader19.cpp(1358,3): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/INCREMENTAL:NO' specification
   OpenGLMeshLoader.vcxproj -> C:\Users\Dalia\source\repos\GraphicsFinal\Debug\OpenGLMeshLoader19.exe
