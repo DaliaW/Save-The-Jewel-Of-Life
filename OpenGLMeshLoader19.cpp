@@ -436,10 +436,12 @@ void Special(int key, int x, int y) {
 			else {
 				//sound(1);
 			}
+			std::cout << (hellLost) << "\n";
 
 			if (catx_add_hell + catx_hell < wallx-20) {
 				//so if the cat hits the wall
 				hellLost = true;
+				//std::cout << (hellLost) << "\n";
 				sound(3);
 			}
 
@@ -505,6 +507,8 @@ void Special(int key, int x, int y) {
 			else {
 				//sound(1);
 			}
+
+			std::cout << (hellLost) << "\n";
 
 			if (catx_add_hell +catx_hell > ((wallx-20))) {
 				//so if the cat hits the wall
@@ -1050,7 +1054,7 @@ void main(int argc, char** argv)
 	myInit();
 
 	if (clearGardenScene) {
-		glutTimerFunc(200, wall_collapse, 0);
+		glutTimerFunc(3000, wall_collapse, 0);
 	}
 
 	LoadAssets();
