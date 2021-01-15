@@ -181,11 +181,9 @@ float catx_add = 0;
 float caty_add= 0;
 float catz_add = 0;
 
-//<<<<<<< hell-scene
 //hellwall
 float wallx = 0;
 
-//<<<<<<< Updated upstream
 //=======
 // garden scene variables
 //bool clearGardenScene = true; // if true means that reached the house and clear lvl 1
@@ -222,17 +220,9 @@ void sound(int reason) {
 		PlaySound("sound_move.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
 
-	/*case 1: //cat collides
+	case 1: //cat collides
 		PlaySound("sound_collide.wav", NULL, SND_FILENAME | SND_ASYNC);
-		break;*/
-
-// 	case 2: //collect coin
-// 		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
-// 		break;
-
-// 	case 3: //collect coin
-// 		PlaySound("sound_lost.wav", NULL, SND_FILENAME | SND_ASYNC);
-// 		break;
+		break;
 
 	case 2: //collect coin
 		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
@@ -241,6 +231,10 @@ void sound(int reason) {
 	case 3: //collect coin
 		PlaySound("Evil_Laugh.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
+
+ 	case 4: //collect coin
+	 	PlaySound("sound_lost.wav", NULL, SND_FILENAME | SND_ASYNC);
+	 	break;
 /*	
 	case 5: //background
 		mciSendString(L"open \"sound_bg.mp3\" type mpegvideo alias mp3", NULL, 0, NULL);
@@ -312,7 +306,7 @@ void Special(int key, int x, int y) {
 				//sound(0);
 			}
 			else {
-				//sound(1);
+				sound(1);
 			}
 
 
@@ -476,7 +470,7 @@ void Special(int key, int x, int y) {
 				//sound(0);
 			}
 			else {
-				//sound(1);
+				sound(1);
 			}
 			std::cout << (hellLost) << "\n";
 
@@ -587,7 +581,7 @@ void Special(int key, int x, int y) {
 				//sound(0);
 			  }
 			  else {
-				//sound(1);
+				sound(1);
 			  }
 
 			std::cout << (hellLost) << "\n";
@@ -652,46 +646,46 @@ void Special(int key, int x, int y) {
 				catx_add += 0.5;
 				//camera.moveX(temp3);
 				//sound(0);
-				if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
-					// Gold coin
-					hellScore += 3;
-					gold1 = true;
-					sound(2);
-				}
+				//if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
+				//	// Gold coin
+				//	hellScore += 3;
+				//	gold1 = true;
+				//	sound(2);
+				//}
 
-				if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
-					// Gold coin
-					//goldCoin(10, 3, 16);
-					hellScore += 3;
-					gold2 = true;
-					sound(2);
-				}
+				//if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
+				//	// Gold coin
+				//	//goldCoin(10, 3, 16);
+				//	hellScore += 3;
+				//	gold2 = true;
+				//	sound(2);
+				//}
 
 
-				if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
-					//silverCoin(-9, 3, 8);
-					hellScore += 2;
-					silver1 = true;
-					sound(2);
-				}
+				//if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
+				//	//silverCoin(-9, 3, 8);
+				//	hellScore += 2;
+				//	silver1 = true;
+				//	sound(2);
+				//}
 
-				if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
-					//silverCoin(-8, 3, -16);
-					hellScore += 2;
-					silver2 = true;
-					sound(2);
-				}
+				//if ((catx_add_hell + catx_hell) > -8 && (catx_add_hell + catx_hell) < -5 && (catz_add_hell + catz_hell) > -16 && (catz_add_hell + catz_hell) < -13 && !silver2) {
+				//	//silverCoin(-8, 3, -16);
+				//	hellScore += 2;
+				//	silver2 = true;
+				//	sound(2);
+				//}
 
-				if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
-					//bronzeCoin(1, 3, 5);
-					hellScore += 1;
-					bronze1 = true;
-					sound(2);
-					//>>>>>>> Stashed changes
-				}
-				else {
-					sound(1);
-				}
+				//if ((catx_add_hell + catx_hell) > 1 && (catx_add_hell + catx_hell) < 4 && (catz_add_hell + catz_hell) > 5 && (catz_add_hell + catz_hell) < 8 && !bronze1) {
+				//	//bronzeCoin(1, 3, 5);
+				//	hellScore += 1;
+				//	bronze1 = true;
+				//	sound(2);
+				//	//>>>>>>> Stashed changes
+				//}
+			}
+			else {
+				sound(1);
 			}
 		}
 	}
