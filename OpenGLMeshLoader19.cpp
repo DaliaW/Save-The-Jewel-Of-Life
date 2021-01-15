@@ -174,11 +174,21 @@ float catz_add = 0;
 bool clearGardenScene = false; // if true means that reached the house and clear lvl 1
 bool lvl_1 = true;
 int score = 0;      // for the garden scene score calculations
+int hellScore = 0; //to be added to garden score if level cleared
+float rotAng;
 
 // coins taken ?
 bool goldCoinTaken = false;
 bool silverCoinTaken = false;
 bool bronzeCoinTaken = false;
+
+//coins taken? hell scene!
+bool gold1 = false;
+bool gold2 = false;
+bool silver1 = false;
+bool silver2 = false;
+bool bronze1 = false;
+bool bronze2 = false;
 
 void sound(int reason) {
 	switch (reason) {
@@ -188,6 +198,10 @@ void sound(int reason) {
 
 	case 1: //cat collides
 		PlaySound("sound_collide.wav", NULL, SND_FILENAME | SND_ASYNC);
+		break;
+
+	case 2: //collect coin
+		PlaySound("sound-coin.wav", NULL, SND_FILENAME | SND_ASYNC);
 		break;
 /*	
 	case 5: //background
@@ -272,21 +286,6 @@ void Special(int key, int x, int y) {
 					lvl_1 = false;
 				}
 			}
-			// not goal? then check coins:
-			// bronze coin
-			//if(17 < temp + catz < 18){
-			//	if (9 < temp + catx < 10) {
-			//		bronzeCoinTaken = true;
-			//		score += 1;
-			//	}
-			//}
-			//// silver coin
-			//if (15 < temp + catz < 16) {
-			//	if (4 < temp + catx < 5) {
-			//		silverCoinTaken = true;
-			//		score += 2;
-			//	}
-			//}
 		}
 
 	}
@@ -311,6 +310,68 @@ void Special(int key, int x, int y) {
 					lvl_1 = false;
 				}
 			}
+			if (catx_add + catx > 13 && catx_add + catx < 16 && catz_add + catz > 14 && catz_add + catz < 17) {
+				score += 3;
+				goldCoinTaken = true;
+				sound(2);
+			}
+			if (catx_add + catx > 3 && catx_add + catx < 6 && catz_add + catz > 14 && catz_add + catz < 17) {
+				score += 2;
+				silverCoinTaken = true;
+				sound(2);
+			}
+			if (catx_add + catx > 9 && catx_add + catx < 11 && catz_add + catz > 14 && catz_add + catz < 17) {
+				score += 1;
+				bronzeCoinTaken = true;
+				sound(2);
+			}
+		}
+		if (clearGardenScene) {
+			if (catx_add + catx > 0 && catx_add + catx < 3 && catz_add + catz > 0 && catz_add + catz < 3) {
+				// Gold coin
+				hellScore += 3;
+				gold1 = true;
+				sound(2);
+			}
+
+			if (catx_add + catx > 10 && catx_add + catx < 13 && catz_add + catz > 16 && catz_add + catz < 19) {
+				// Gold coin
+				//goldCoin(10, 3, 16);
+				hellScore += 3;
+				gold2 = true;
+				sound(2);
+			}
+
+
+			if (catx_add + catx > -9 && catx_add + catx < -6 && catz_add + catz > 8 && catz_add + catz < 11) {
+				//silverCoin(-9, 3, 8);
+				hellScore += 2;
+				silver1 = true;
+				sound(2);
+			}
+
+			if (catx_add + catx > -8 && catx_add + catx < -5 && catz_add + catz > -16 && catz_add + catz < -13) {
+				//silverCoin(-8, 3, -16);
+				hellScore += 2;
+				silver2 = true;
+				sound(2);
+			}
+
+			if (catx_add + catx > 1 && catx_add + catx < 4 && catz_add + catz > 5 && catz_add + catz < 8) {
+				//bronzeCoin(1, 3, 5);
+				hellScore += 1;
+				bronze1 = true;
+				sound(2);
+			}
+
+			if (!bronze2) {
+				//bronzeCoin(6, 3, -2);
+				hellScore += 1;
+				bronze2 = true;
+				sound(2);
+			}
+
+			std::cout << (hellScore) << "score\n";
 		}
 	}
 	else if (key == GLUT_KEY_LEFT) {
@@ -365,7 +426,7 @@ void InitLightSource()
 	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
 	// Finally, define light source 0 position in World Space
-	GLfloat light_position[] = { 0.0f, 10.0f, 0.0f, 1.0f };
+	GLfloat light_position[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 }
 
@@ -653,9 +714,31 @@ void hellScene() {
 	glPopMatrix();
 
 
-	if (!goldCoinTaken) {
+	if (!gold1) {
 		// Gold coin
-		goldCoin(15, 1, 16);
+		goldCoin(0, 3, 0);
+	}
+
+	if (!gold2) {
+		// Gold coin
+		goldCoin(10, 3, 16);
+	}
+
+
+	if (!silver1) {
+		silverCoin(-9, 3, 8);
+	}
+
+	if (!silver2) {
+		silverCoin(-8, 3, -16);
+	}
+
+	if (!bronze1) {
+		bronzeCoin(1, 3, 5);
+	}
+
+	if (!bronze2) {
+		bronzeCoin(6, 3, -2);
 	}
 
 	//sky box
@@ -677,7 +760,9 @@ void hellScene() {
 void gardenScene() {
 	// Draw Ground
 	RenderGardenGround();
-	glEnable(GL_LIGHT0);
+	// create a vector or array of floats
+	GLfloat light0Diffuse[] = { 0.6f,0.2f,0.2f,0 };
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diffuse);
 	//draw cat
 	drawCat(catx_add, caty_add, catz_add);
 
@@ -801,7 +886,7 @@ void gardenScene() {
 
 	// coins
 	if (!bronzeCoinTaken) {
-		bronzeCoin(10, 1, 18);
+		bronzeCoin(10, 1, 16);
 	}
 
 	if (!silverCoinTaken) {
@@ -838,19 +923,22 @@ void myDisplay(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
-	GLfloat lightPosition[] = { 0.0f, 100.0f, 0.0f, 0.0f };
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
-
 	setupCamera();
 
 	// here we should set a flag if not house_target and timer == 0 then display garden scene
 	// otherwise display hell scene
 	if (!clearGardenScene) {
+		GLfloat lightIntensity[] = { 1, 0.6, 0.866, 1.0f };
+		GLfloat lightPosition[] = { rotAng,5.0f , 0.0f, 1.0f };
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 		gardenScene();
 	}
 	else {
+		GLfloat lightIntensity[] = {1, 0.011, 0, 1.0f };
+		GLfloat lightPosition[] = { rotAng, 5.0f, 0.0f, 0.0f };
+		glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, lightIntensity);
 		hellScene();
 	}
 
@@ -956,7 +1044,13 @@ void LoadAssets()
 	loadBMP(&texS, "textures/silver.bmp", false); // texture for silver coin
 
 }
-
+//=======================================================================
+// Light animation Function
+//=======================================================================
+void Anim() {
+	rotAng += 0.05;
+	glutPostRedisplay();
+}
 //=======================================================================
 // Main Function
 //=======================================================================
@@ -983,6 +1077,9 @@ void main(int argc, char** argv)
 	glutMouseFunc(myMouse);
 
 	glutReshapeFunc(myReshape);
+
+	glutIdleFunc(Anim);
+
 
 	myInit();
 
