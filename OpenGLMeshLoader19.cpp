@@ -283,7 +283,7 @@ void Special(int key, int x, int y) {
 		
 		if (lvl_1) {
 			// if reached the house then set the flag to true to clear lvl 1
-			if (catx_add + catx > -2 && catx_add + catx < 1 && catz_add + catz > 1 && catz_add + catz < 2) {
+			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
 				clearGardenScene = true;
 				std::cout << (clearGardenScene) << "reached my goal:\n";
 				lvl_1 = false;
@@ -303,77 +303,14 @@ void Special(int key, int x, int y) {
 		else {
 			sound(1);
 		}
-
 		if (lvl_1) {
 			// if reached the house then set the flag to true to clear lvl 1
-			if (catx_add + catx > -2 && catx_add + catx < 1 && catz_add + catz > 1 && catz_add + catz < 2) {
+			if (catx_add + catx > -3 && catx_add + catx < 2 && catz_add + catz > -2 && catz_add + catz < 2) {
 				clearGardenScene = true;
 				std::cout << (clearGardenScene) << "reached my goal:\n";
 				lvl_1 = false;
 				sound(3);
 			}
-			if (catx_add + catx > 13 && catx_add + catx < 16 && catz_add + catz > 14 && catz_add + catz < 17) {
-				score += 3;
-				goldCoinTaken = true;
-				sound(2);
-			}
-			if (catx_add + catx > 3 && catx_add + catx < 6 && catz_add + catz > 14 && catz_add + catz < 17) {
-				score += 2;
-				silverCoinTaken = true;
-				sound(2);
-			}
-			if (catx_add + catx > 9 && catx_add + catx < 11 && catz_add + catz > 14 && catz_add + catz < 17) {
-				score += 1;
-				bronzeCoinTaken = true;
-				sound(2);
-			}
-		}
-		if (clearGardenScene) {
-			if (catx_add + catx > 0 && catx_add + catx < 3 && catz_add + catz > 0 && catz_add + catz < 3) {
-				// Gold coin
-				hellScore += 3;
-				gold1 = true;
-				sound(2);
-			}
-
-			if (catx_add + catx > 10 && catx_add + catx < 13 && catz_add + catz > 16 && catz_add + catz < 19) {
-				// Gold coin
-				//goldCoin(10, 3, 16);
-				hellScore += 3;
-				gold2 = true;
-				sound(2);
-			}
-
-
-			if (catx_add + catx > -9 && catx_add + catx < -6 && catz_add + catz > 8 && catz_add + catz < 11) {
-				//silverCoin(-9, 3, 8);
-				hellScore += 2;
-				silver1 = true;
-				sound(2);
-			}
-
-			if (catx_add + catx > -8 && catx_add + catx < -5 && catz_add + catz > -16 && catz_add + catz < -13) {
-				//silverCoin(-8, 3, -16);
-				hellScore += 2;
-				silver2 = true;
-				sound(2);
-			}
-
-			if (catx_add + catx > 1 && catx_add + catx < 4 && catz_add + catz > 5 && catz_add + catz < 8) {
-				//bronzeCoin(1, 3, 5);
-				hellScore += 1;
-				bronze1 = true;
-				sound(2);
-			}
-
-			if (!bronze2) {
-				//bronzeCoin(6, 3, -2);
-				hellScore += 1;
-				bronze2 = true;
-				sound(2);
-			}
-
-			std::cout << (hellScore) << "score\n";
 		}
 	}
 	else if (key == GLUT_KEY_LEFT) {
@@ -888,17 +825,17 @@ void gardenScene() {
 
 	// coins
 	if (!bronzeCoinTaken) {
-		bronzeCoin(10, 1, 16);
+		bronzeCoin(10, 2, 16);
 	}
 
 	if (!silverCoinTaken) {
 		// Silver coin
-		silverCoin(5, 1, 16);
+		silverCoin(5, 2, 16);
 	}
 
 	if (!goldCoinTaken) {
 		// Gold coin
-		goldCoin(15, 1, 16);
+		goldCoin(15, 2, 16);
 	}
 
 	//sky box
@@ -982,11 +919,71 @@ void myMotion(int x, int y)
 //=======================================================================
 void myMouse(int button, int state, int x, int y)
 {
-	y = HEIGHT - y;
 
-	if (state == GLUT_DOWN)
+	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_UP))
 	{
-		cameraZoom = y;
+		caty_add -= 3;
+		if (catx_add + catx > 13 && catx_add + catx < 16 && catz_add + catz > 14 && catz_add + catz < 17) {
+			score += 3;
+			goldCoinTaken = true;
+			sound(2);
+		}
+		if (catx_add + catx > 3 && catx_add + catx < 6 && catz_add + catz > 14 && catz_add + catz < 17) {
+			score += 2;
+			silverCoinTaken = true;
+			sound(2);
+		}
+		if (catx_add + catx > 9 && catx_add + catx < 11 && catz_add + catz > 14 && catz_add + catz < 17) {
+			score += 1;
+			bronzeCoinTaken = true;
+			sound(2);
+		}
+
+	if (clearGardenScene) {
+		if (catx_add + catx > 0 && catx_add + catx < 3 && catz_add + catz > 0 && catz_add + catz < 3) {
+			// Gold coin
+			hellScore += 3;
+			gold1 = true;
+			sound(2);
+		}
+
+		if (catx_add + catx > 10 && catx_add + catx < 13 && catz_add + catz > 16 && catz_add + catz < 19) {
+			// Gold coin
+			//goldCoin(10, 3, 16);
+			hellScore += 3;
+			gold2 = true;
+			sound(2);
+		}
+
+
+		if (catx_add + catx > -9 && catx_add + catx < -6 && catz_add + catz > 8 && catz_add + catz < 11) {
+			//silverCoin(-9, 3, 8);
+			hellScore += 2;
+			silver1 = true;
+			sound(2);
+		}
+
+		if (catx_add + catx > -8 && catx_add + catx < -5 && catz_add + catz > -16 && catz_add + catz < -13) {
+			//silverCoin(-8, 3, -16);
+			hellScore += 2;
+			silver2 = true;
+			sound(2);
+		}
+
+		if (catx_add + catx > 1 && catx_add + catx < 4 && catz_add + catz > 5 && catz_add + catz < 8) {
+			//bronzeCoin(1, 3, 5);
+			hellScore += 1;
+			bronze1 = true;
+			sound(2);
+		}
+
+		std::cout << (hellScore) << "score\n";
+	}
+
+	}
+	if ((button == GLUT_LEFT_BUTTON) && (state == GLUT_DOWN))
+	{
+		caty_add += 3;
 	}
 }
 
