@@ -295,7 +295,7 @@ void Special(int key, int x, int y) {
 			}
 
 
-			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 3 && !gold1) {
+			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
 				// Gold coin
 				hellScore += 3;
 				gold1 = true;
@@ -371,14 +371,14 @@ void Special(int key, int x, int y) {
 					//sound(1);
 				}
 
-				if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 3 && !gold1) {
+				if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
 					// Gold coin
 					hellScore += 3;
 					gold1 = true;
 					sound(2);
 				}
 
-				if ((catx_add_hell + catx_hell )> 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
+				if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
 					// Gold coin
 					//goldCoin(10, 3, 16);
 					hellScore += 3;
@@ -387,7 +387,7 @@ void Special(int key, int x, int y) {
 				}
 
 
-				if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell )< -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
+				if ((catx_add_hell + catx_hell) > -9 && (catx_add_hell + catx_hell) < -6 && (catz_add_hell + catz_hell) > 8 && (catz_add_hell + catz_hell) < 11 && !silver1) {
 					//silverCoin(-9, 3, 8);
 					hellScore += 2;
 					silver1 = true;
@@ -408,12 +408,13 @@ void Special(int key, int x, int y) {
 					sound(2);
 				}
 
-				if ((catx_add_hell + catx_hell )> 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
+				if ((catx_add_hell + catx_hell) > 6 && (catx_add_hell + catx_hell) < 9 && (catz_add_hell + catz_hell) > -2 && (catz_add_hell + catz_hell) < 1 && !bronze2) {
 					//bronzeCoin(6, 3, -2);
 					hellScore += 1;
 					bronze2 = true;
 					sound(2);
 				}
+
 
 				std::cout << (hellScore) << "score\n";
 
@@ -438,14 +439,13 @@ void Special(int key, int x, int y) {
 			}
 			std::cout << (hellLost) << "\n";
 
-			if (catx_add_hell + catx_hell < wallx-20) {
+			if (((catx_add_hell + catx_hell) < ((wallx - 20)) || ((catx_add_hell + catx_hell) > (-(wallx)+20)))) {
 				//so if the cat hits the wall
 				hellLost = true;
-				//std::cout << (hellLost) << "\n";
 				sound(3);
 			}
 
-			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 3 && !gold1) {
+			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
 				// Gold coin
 				hellScore += 3;
 				gold1 = true;
@@ -488,6 +488,7 @@ void Special(int key, int x, int y) {
 				bronze2 = true;
 				sound(2);
 			}
+
 
 			std::cout << (hellScore) << "score\n";
 
@@ -510,19 +511,20 @@ void Special(int key, int x, int y) {
 
 			std::cout << (hellLost) << "\n";
 
-			if (catx_add_hell +catx_hell > ((wallx-20))) {
+			if (((catx_add_hell + catx_hell) < ((wallx - 20)) || ((catx_add_hell + catx_hell) > (-(wallx)+20)))) {
 				//so if the cat hits the wall
 				hellLost = true;
 				sound(3);
 			}
 
-			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 3 && !gold1) {
+			if ((catx_add_hell + catx_hell) > 0 && (catx_add_hell + catx_hell) < 3 && (catz_add_hell + catz_hell) > 0 && (catz_add_hell + catz_hell) < 5 && !gold1) {
 				// Gold coin
 				hellScore += 3;
 				gold1 = true;
 				sound(2);
 			}
 
+			g
 			if ((catx_add_hell + catx_hell) > 10 && (catx_add_hell + catx_hell) < 13 && (catz_add_hell + catz_hell) > 16 && (catz_add_hell + catz_hell) < 19 && !gold2) {
 				// Gold coin
 				//goldCoin(10, 3, 16);
@@ -559,6 +561,7 @@ void Special(int key, int x, int y) {
 				bronze2 = true;
 				sound(2);
 			}
+
 
 			std::cout << (hellScore) << "score\n";
 
@@ -874,7 +877,7 @@ void myDisplay(void)
 
 //<<<<<<< Updated upstream
 	// Gold coin
-	goldCoin(15, 1, 16);
+	
 //=======
 	if (!gold1) {
 		// Gold coin
@@ -1020,7 +1023,7 @@ void LoadAssets()
 
 void wall_collapse(int useless) {
 	wallx += (0.1);
-	glutTimerFunc(200, wall_collapse, 0);
+	glutTimerFunc(2000, wall_collapse, 0);
 	glutPostRedisplay();
 }
 
@@ -1054,7 +1057,7 @@ void main(int argc, char** argv)
 	myInit();
 
 	if (clearGardenScene) {
-		glutTimerFunc(3000, wall_collapse, 0);
+		glutTimerFunc(9000, wall_collapse, 0);
 	}
 
 	LoadAssets();
